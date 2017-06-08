@@ -1,22 +1,30 @@
-// import "bootstrap";
-import '../assets/styles/app.scss';
 import React from 'react';
-import { Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Route, Redirect, withRouter } from 'react-router-dom';
+import Async from 'react-code-splitting';
+
+import Login from './components/Auth/Login';
 import Header from './shared/Header';
-import Home from './components/Home';
+
 import SearchResult from './components/SearchResult';
 
-// import Async from 'react-code-splitting'
 
-// const Home = () => <Async load={ import('./components/Home') } />;
+const Home = () => <Async load={import('./components/Home')} />;
 
-const App = () => (
+const App = ({ user }) => (
   <div>
     <Header />
-    <Route exact path="/" component={Home} />
-    <Route exact path="/SearchResult" component={SearchResult} />
+    {user.token
+      ? <Route path="/" component={Home} />
+      : <Redirect to="/login" />}
+    <Route path="/login" component={Login} />
+    <Route path="/search-result" component={SearchResult} />
   </div>
 );
 
-export default App;
+App.propTypes = {
+  user: PropTypes.shape({}).isRequired,
+};
 
+export default withRouter(connect(state => ({ user: state.user }))(App));

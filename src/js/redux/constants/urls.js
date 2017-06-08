@@ -1,7 +1,5 @@
-export const SEARCHLIST = '';
+const API = 'https://reqres.in/api';
 
-// https://reqres.in/api/login
-
-// export const SENDEMAIL = `${API}/gists`;
-// export const LOGIN = `${API}/login`
-// export const LOGIN_WITH_TOKEN = `${API}/token`
+export const LOGIN = `${API}/login`;
+export const LOGIN_WITH_TOKEN = `${API}/token`;
+export const CREATE = `${API}/users`;

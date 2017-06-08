@@ -4,13 +4,10 @@ import React, { Component } from 'react';
 import ListItems from './partial/ListItems';
 
 class SearchResult extends Component {
-
-  
   render() {
     return (
       <div>
-        
-        <ListItems/>
+        <ListItems />
       </div>
     );
   }

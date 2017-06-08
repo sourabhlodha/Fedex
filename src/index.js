@@ -1,21 +1,22 @@
-import 'babel-polyfill';
-import Offline from 'offline-plugin/runtime';
 import React from 'react';
-import { Provider } from 'react-redux';
 import { render } from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import { store } from './js/redux/store'
 
-import App from './js/App';
+import { Root } from './Root';
+import './assets/styles/app.scss';
 
-if (process.env.NODE_ENV === 'production') Offline.install();
-
-export const Root = () => (
-  <Provider store={store}>
-    <BrowserRouter><App /></BrowserRouter>
-  </Provider>
-);
-
-if (!module.hot) {
-  render(<Root />, document.querySelector('react'))
+const renderApp = () => {
+  render(<Root />, document.querySelector('react'));
 };
+
+renderApp();
+
+// if (__DEV__) {
+// console.log('Abhishek');
+// console.log(process);
+// console.log(module);
+// console.log(process.env.NODE_ENV);
+// }
+
+// if (module.hot) {
+//   module.hot.accept('../src', renderApp);  
+// }

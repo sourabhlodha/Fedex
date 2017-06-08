@@ -1,2 +1,2 @@
-// export * from './persist';
+export * from './persist';
 export * from './fetch';

@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
-// custom Component
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
-import Search from './partial/Search';
-import LoginForm from './partial/LoginForm';
+import LandingPage from './LandingPage';
 
-class Home extends Component {
-  render() {
-    return (
-      <div>
-        
-        <LoginForm/>
-      </div>
-    );
-  }
-}
+const Home = ({ user }) =>
+  (user.token
+    ? <LandingPage />
+    : <Redirect to="/login" />);
 
-export default Home;
+Home.propTypes = {
+  user: PropTypes.shape({}).isRequired,
+};
+
+export default connect(state => ({ user: state.user }))(Home);
