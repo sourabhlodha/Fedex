@@ -1,5 +1,5 @@
 import { actionTypes as types, urls } from '../constants';
-import { post } from '../helpers';
+import { post,get } from '../helpers';
 
 
 export const login = ({ email, password }) => dispatch => {
@@ -41,13 +41,22 @@ export const searchAssets = ({ searchText }) => dispatch => {
 
 
 export const vision = ({ imageurl }) => dispatch => {
-  console.log(imageurl);
   dispatch({ type: types.VISION_REQUEST });
   post({
     url: urls.VISIONAPI,
     body: {'url':imageurl},
     success: types.VISION_SUCCESS,
     failure: types.VISION_FAILURE,
+    dispatch,
+  });
+};
+
+export const getImageList = () => dispatch => {
+  dispatch({ type: types.IMAGE_REQUEST});
+  get({
+    url: urls.IMAGELIST,
+    success: types.IMAGE_SUCCESS,
+    failure: types.IMAGE_FAILURE,
     dispatch,
   });
 };
