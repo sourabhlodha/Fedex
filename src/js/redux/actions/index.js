@@ -38,3 +38,16 @@ export const searchAssets = ({ searchText }) => dispatch => {
     dispatch,
   });
 };
+
+
+export const vision = ({ imageurl }) => dispatch => {
+  console.log(imageurl);
+  dispatch({ type: types.VISION_REQUEST });
+  post({
+    url: urls.VISIONAPI,
+    body: {'url':imageurl},
+    success: types.VISION_SUCCESS,
+    failure: types.VISION_FAILURE,
+    dispatch,
+  });
+};
