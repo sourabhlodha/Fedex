@@ -40,11 +40,12 @@ export const searchAssets = ({ searchText }) => dispatch => {
 };
 
 
-export const vision = ({ imageurl }) => dispatch => {
+export const vision = (body) => dispatch => {
   dispatch({ type: types.VISION_REQUEST });
+  console.log(body);
   post({
     url: urls.VISIONAPI,
-    body: {'url':imageurl},
+    body: body,
     success: types.VISION_SUCCESS,
     failure: types.VISION_FAILURE,
     dispatch,

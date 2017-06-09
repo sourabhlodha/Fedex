@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import _ from 'lodash';
+import _ from 'lodash';
 // custom Component
 
 import ListItems from './partial/ListItems';
@@ -24,61 +24,29 @@ class SearchResult extends Component {
       index: 0,
     };
   }
-
+  
   _callApi(index) {  
-    
-    const length = images.length;
-    
-    if (this.state.index < length) {   
+    const length = images.length -1;
+    if (this.state.index <= length) {   
       const image = images[this.state.index | index ];
-      console.log(this.state.index);
-      this.props.dispatch(vision({image}));
+      const imageBody = { url: image };
+      this.props.dispatch(vision(imageBody));
     }
   }
+
   componentDidMount() {
-    // let image = images[0]; 
     this._callApi(0);
-    
-    // console.log(images[0]);    
-    // this.props.dispatch(vision({image}));
-   // let imageurl='http://upload.wikimedia.org/wikipedia/commons/3/3c/Shaki_waterfall.jpg';
-  //  this.props.dispatch(getImageList());
-    // _.map(images,image =>{
-    //   // this.props.dispatch(vision({images}));
-    //   // console.log('images'+images);
-    //   this._CallApi((image));
-      
-    // }); 
   }
 
   componentWillReceiveProps(nextProps) {
     console.log(nextProps); 
-    // if(nextProps.fetched){
-    //   this._CallApi();
-    //   this.setState({index:this.index+1});
-    // }
+    if(!_.isEmpty(nextProps.visionList)) {
+      this.setState({ index: this.state.index + 1 }, () => {
+        this._callApi();
+      });
+    }
   }
-   
-  
-  
-
-  render()
-   {
-    
-    // console.log(images);
-    // const {  fetching,fetched } = this.props ;
-    //console.log(fetching);
-    // console.log(fetched);
-  //   let data = [];
-  //   if (fetched) {
-  //     _.map(accountList.accounts, account => {
-  //       let obj = {
-  //        'id': account.id,
-  //         'timeline': [] 
-  //      }
-  // //  console.log('imageDataList'+imageDataList);
-    // console.log('visionList'+visionList);
-
+  render() {
     return (
       <div>
         <ListItems />
