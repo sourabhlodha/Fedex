@@ -2,13 +2,13 @@ import { combineReducers } from 'redux';
 
 import user from './user';
 import search from './search';
-import visionsearch from './visionsearch';
 import imagelist from './imagelist';
+import dropzone from './dropzone';
 const rootReducer = combineReducers({
   user,
   search,
-  visionsearch,
   imagelist,
+  dropzone,
 });
 
 export default rootReducer;

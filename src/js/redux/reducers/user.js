@@ -1,10 +1,17 @@
 import { actionTypes as types } from '../constants';
 
-const user = (state = {}, action) => {
+const initialState = {
+  loginDetail: {},
+  user: {},
+};
+
+const user = (state = initialState, action) => {
   switch (action.type) {
+  case types.LOGIN_REQUEST:
+    return {...state, loginDetail: action.data};
   case types.SIGNUP_SUCCESS:
   case types.LOGIN_SUCCESS:
-    return action.data;
+    return {...state, user: action.data};
   case types.LOGIN_FAILURE:
     return {};
   default:

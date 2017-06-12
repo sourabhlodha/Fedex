@@ -1,9 +1,16 @@
 import { actionTypes as types, urls } from '../constants';
 import { post,get } from '../helpers';
-
+import request from 'superagent';
+import axios from 'axios';
+import _ from 'lodash';
 
 export const login = ({ email, password }) => dispatch => {
-  dispatch({ type: types.LOGIN_REQUEST });
+  const data = {
+    email,
+    password,
+  };
+
+  dispatch({ type: types.LOGIN_REQUEST, data});
   post({
     url: urls.LOGIN,
     body: { email, password },
@@ -14,14 +21,15 @@ export const login = ({ email, password }) => dispatch => {
 };
 
 export const loginWithToken = () => (dispatch, getState) => {
-  const token = getState().user.token;
+  // console.log(getState().user);
+  const token = getState().user.loginDetail;
 
-  if (typeof token === 'undefined') return;
-
-  dispatch({ type: types.LOGIN_REQUEST });
+  if (_.isEmpty(token)) return;
+  const data = token;
+  dispatch({ type: types.LOGIN_REQUEST, data });
   post({
-    url: urls.LOGIN_WITH_TOKEN,
-    body: { token },
+    url: urls.LOGIN,
+    body: token ,
     success: types.LOGIN_SUCCESS,
     failure: types.LOGIN_FAILURE,
     dispatch,
@@ -40,9 +48,8 @@ export const searchAssets = ({ searchText }) => dispatch => {
 };
 
 
-export const vision = (body) => dispatch => {
+export const getVision = (body) => dispatch => {
   dispatch({ type: types.VISION_REQUEST });
-  console.log(body);
   post({
     url: urls.VISIONAPI,
     body: body,
@@ -50,6 +57,10 @@ export const vision = (body) => dispatch => {
     failure: types.VISION_FAILURE,
     dispatch,
   });
+};
+
+export const getImageUrl = (body) => dispatch => {
+  dispatch({ type: types.GET_IMAGE_URL, body });
 };
 
 export const getImageList = () => dispatch => {
@@ -61,3 +72,99 @@ export const getImageList = () => dispatch => {
     dispatch,
   });
 };
+
+export const uploadAzure = (file) => dispatch => {
+  dispatch({ type: types.DROPZONE_REQUEST});
+  const req = request.post('http://fedexovergoodservices.azurewebsites.net/api/Upload/user/PostUserImage');
+  // files.forEach(file => {
+  console.log(file);
+  req.attach(file.name, file);
+  // });
+  req.end((err, res) => {
+    if (res) {
+      const data = JSON.parse(res.text);
+      dispatch({ type: types.DROPZONE_SUCCESS, data});
+    } else if (err) {
+      dispatch({ type: types.DROPZONE_ERROR, err});
+    }
+  });
+};
+
+
+export const ocrVision = (body) => dispatch => {
+  dispatch({ type: types.OCR_VISION_REQUEST });
+  console.log(body);
+  post({
+    url: urls.OCRVISIONAPI,
+    body: body,
+    success: types.OCR_VISION_SUCCESS,
+    failure: types.OCR_VISION_FAILURE,
+    dispatch,
+  });
+};
+
+export const handWrittenVision = (body) => dispatch => {
+  dispatch({ type: types.HAND_VISION_REQUEST });
+  console.log(body);
+  post({
+    url: urls.HANDWRITTENVISIONAPI,
+    body: body,
+    success: types.HAND_VISION_SUCCESS,
+    failure: types.HAND_VISION_FAILURE,
+    dispatch,
+  });
+};
+
+export const goToDropZonePage = () => dispatch => {
+  dispatch({ type: types.SHOW_DROPZONE_PAGE});
+};
+
+export const clearAll = () => dispatch => {
+  dispatch({ type: types.CLEAR_ALL});
+};
+
+
+
+export const saveToCosmosDB = (body) => dispatch => {
+  console.log(JSON.stringify(body));
+  dispatch({ type: types.SAVE_COSMOS_DB_REQUEST });
+  post({
+    url: 'http://fedexovergoodservices.azurewebsites.net/api/Overgood/Create',
+    body: body,
+    success: types.SAVE_COSMOS_DB_SUCCESS,
+    failure: types.SAVE_COSMOS_DB_FALIURE,
+    dispatch,
+  });
+};
+
+
+export const onSearch = (url) => dispatch => {
+  dispatch({ type: types.ON_SEARCH_REQUEST});
+  
+  axios.get(url)
+  .then(response => {
+    dispatch({ type: types.ON_SEARCH_SUCCESS, response});
+  });
+
+};
+
+export const clearSearch = () => dispatch => {
+  dispatch({ type: types.ON_CLEAR_SEARCH });
+};
+
+export const showVisionPage = (data) => dispatch => {
+  dispatch({ type: types.SHOW_VISION_DETAILS, data });
+};
+
+export const hideVisionPage = () => dispatch => {
+  dispatch({ type: types.HIDE_VISION_DETAILS });
+};
+
+
+
+
+// https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&highlight=captions&suggesterName=sg&fuzzy=false&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
+
+// https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
+
+// https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&$orderby=confidence desc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4

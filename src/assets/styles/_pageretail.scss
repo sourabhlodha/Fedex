@@ -537,9 +537,15 @@ button.card{
  }
 
 .dropzone {
-    padding: 40px 0;
-    border: 1px solid #dcdcdc;
-    margin: 40px 0;
+    padding: 30px 0;
+    text-align: center;
+    max-width: 800px;
+    margin: 30px auto 40px;
+    background: #6c0298;
+    color: white;
+    font-size: 23px;
+    border-radius: 2px;
+    overflow: hidden;
     .dz-message {
       font-size: 30px;
       font-family: $font-bold;
@@ -547,6 +553,44 @@ button.card{
       margin-bottom: 20px;
       text-align: center;
     }
+}
+.top-card{
+  min-height: 250px;
+}
+.img-upload-list {
+  width: 800px;
+  margin: 0 auto;
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+      display: flex;
+      padding: 20px;
+      border-bottom: 1px solid #ecdcf3;
+      align-items: center;
+      background-color: #faefff;
+      .thumb{
+        width: 70px;
+        position: relative;
+        height: 70px;
+        border-radius: 2px;
+        overflow: hidden;
+        >div {
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          height: 100%;
+          width: 100%;
+          position: absolute;
+        }
+      }
+      .file-name{
+        padding: 0 40px;
+        width: 80%;
+      }
+    }
+  }
 }
 .dz-preview {
     border-bottom: 1px solid #dcdcdc;
@@ -597,4 +641,140 @@ button.card{
     .dz-error-message{
       display: none;
     }
+}
+
+.spinner {
+  margin: 100px auto 0;
+  width: 70px;
+  text-align: center;
+}
+
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: #333;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% { 
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}
+
+.visionModal {
+  background-color: rgba(#000, .3);
+  display: block !important;
+}
+.visionModal {
+  .modal-dialog {
+    background: #fff;
+    border-radius: 3px;
+    overflow: hidden;
+    max-width: 990px;
+  }
+  .moda-body {
+    padding: 20px;
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      li {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #dcdcdc;
+        padding-top: 9px;
+        .title{
+          width: 30%;
+          font-family: GalanoGrotesqueBold;
+          font-size: 12px;
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+  .Image {
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    padding: 12px;
+    text-align: center;
+  }
+}
+
+.display-progress {
+  .info {
+    font-size: 30px;
+    color: $blue;
+    position: relative;
+    .perc{
+      font-size: 30px;
+      color: $white;
+      padding-right: 10px;
+      position: absolute;
+      left: 10px;
+      top: 3px;
+    }
+    .progress {
+      border-radius: 2px;
+      .progress-bar {
+        height: 40px;
+        background-color: $blue;
+      }
+    }
+  }
+}
+.product-list {
+  margin-bottom: 20px;
+  .product-list-box {
+    display: flex;
+    align-items: center;
+  }
+  .product-image{
+    width: 20%;
+    overflow: hidden;
+  }
+  .product-desc{
+    width: 80%;
+    padding: 0 20px;
+    >div {
+      margin-bottom: 10px;
+    }
+    .title {
+      color: $black;
+      font-size: 16px;
+      font-family: $font-bold;
+      margin-bottom: 10px;
+    }
+  }
+  .btn-primary {
+    background-color: #78dad2;
+  }
+}
+
+.search-result-page{
+  padding: 30px 15px;
 }

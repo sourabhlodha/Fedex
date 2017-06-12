@@ -5,21 +5,18 @@ import { Route, Redirect, withRouter } from 'react-router-dom';
 import Async from 'react-code-splitting';
 
 import Login from './components/Auth/Login';
+
 import Header from './shared/Header';
-
-import SearchResult from './components/SearchResult';
-
 
 const Home = () => <Async load={import('./components/Home')} />;
 
 const App = ({ user }) => (
   <div>
     <Header />
-    {user.token
+    {user.user.token
       ? <Route path="/" component={Home} />
       : <Redirect to="/login" />}
     <Route path="/login" component={Login} />
-    <Route path="/search-result" component={SearchResult} />
   </div>
 );
 

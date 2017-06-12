@@ -18,7 +18,7 @@ const Login = ({ user, login }) => {
   return (
     <div>
       <Form onSubmit={handleSubmit} />
-      {user.token && <Redirect to="/" />}
+      {user.user.token && <Redirect to="/" />}
     </div>
   );
 };
