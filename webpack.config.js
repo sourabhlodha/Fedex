@@ -144,7 +144,7 @@ module.exports = (env) => {
 
   const pages = [
     parts.page({
-      title: 'Webpack demo',
+      title: 'Syntel | Fedex Demo',
       entry: {
         app: env === 'production' ? 
           ['babel-polyfill', PATHS.app] : ['babel-polyfill', 'react-hot-loader/patch', PATHS.app],

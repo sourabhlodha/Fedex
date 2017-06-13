@@ -758,6 +758,29 @@
           "0": 0
         }
       }
+    },
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/html-webpack-plugin/lib/loader.js!config/index.html": "+OJr",
+          "node_modules/webpack/buildin/module.js": "3IRH",
+          "node_modules/webpack/buildin/global.js": "DuR2",
+          "node_modules/lodash/lodash.js": "M4fF"
+        },
+        "usedIds": {
+          "+OJr": "+OJr",
+          "3IRH": "3IRH",
+          "DuR2": "DuR2",
+          "M4fF": "M4fF"
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "byBlocks": {},
+        "usedIds": {
+          "0": 0
+        }
+      }
     }
   ],
   "modules": {
@@ -3205,6 +3228,97 @@
           "l4Wd": "l4Wd",
           "lC/i": "lC/i",
           "n+F3": "n+F3",
+          "qqbP": "qqbP",
+          "rJ03": "rJ03",
+          "wXm5": "wXm5",
+          "xzwO": "xzwO",
+          "zliw": "zliw"
+        }
+      },
+      "chunks": {
+        "byName": {},
+        "byBlocks": {},
+        "usedIds": {
+          "0": 0
+        }
+      }
+    },
+    {
+      "modules": {
+        "byIdentifier": {
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-SemiBold.otf": "2DS0",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-Medium.eot": "4Zmj",
+          "node_modules/url-loader/index.js??ref--4!src/assets/fonts/CYBHouschkaAltPro-Light.svg": "6bRT",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-Regular.eot": "8Dl6",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/CYBHouschkaAltPro-Light.eot": "9GaS",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/CYBHouschkaAltPro-Medium.otf": "9o4S",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-LightItalic.eot": "D8GD",
+          "node_modules/css-loader/lib/css-base.js": "FZ+f",
+          "node_modules/url-loader/index.js??ref--4!node_modules/font-awesome/fonts/fontawesome-webfont.svg?v=4.7.0": "Fqd/",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-SemiBold.eot": "GHvZ",
+          "node_modules/file-loader/index.js??ref--1!node_modules/font-awesome/fonts/fontawesome-webfont.ttf?v=4.7.0": "IMLV",
+          "node_modules/url-loader/index.js??ref--4!src/assets/fonts/GalanoGrotesque-Light.svg": "JRBl",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-Medium.otf": "MyKl",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-Regular.otf": "NgJd",
+          "node_modules/url-loader/index.js??ref--4!src/assets/fonts/CYBHouschkaAltPro-Medium.svg": "O+wT",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-MediumItalic.otf": "Pa7Z",
+          "node_modules/css-loader/index.js!node_modules/sass-loader/lib/loader.js!node_modules/postcss-loader/lib/index.js?{\"plugins\":[null]}!src/assets/styles/app.scss": "QnFo",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-LightItalic.otf": "WEP1",
+          "node_modules/file-loader/index.js??ref--1!node_modules/font-awesome/fonts/fontawesome-webfont.eot?v=4.7.0": "cEaC",
+          "node_modules/file-loader/index.js??ref--1!node_modules/font-awesome/fonts/fontawesome-webfont.eot": "cmUn",
+          "node_modules/url-loader/index.js??ref--4!src/assets/fonts/GalanoGrotesque-Bold.svg": "dltz",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/CYBHouschkaAltPro-Medium.eot": "fjwd",
+          "node_modules/url-loader/index.js??ref--4!src/assets/fonts/CYBHouschkaAltPro-Bold.svg": "fv2J",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-MediumItalic.eot": "gtkP",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-Light.eot": "iBoZ",
+          "node_modules/file-loader/index.js??ref--1!node_modules/font-awesome/fonts/fontawesome-webfont.woff?v=4.7.0": "jNsU",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-Bold.otf": "jiXG",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/CYBHouschkaAltPro-Bold.eot": "kYHY",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/CYBHouschkaAltPro-Light.otf": "kZQp",
+          "node_modules/url-loader/index.js??ref--4!src/assets/fonts/GalanoGrotesque-MediumItalic.svg": "l4Wd",
+          "node_modules/url-loader/index.js??ref--4!src/assets/fonts/GalanoGrotesque-Medium.svg": "lC/i",
+          "node_modules/url-loader/index.js??ref--4!src/assets/fonts/GalanoGrotesque-Regular.svg": "n+F3",
+          "node_modules/file-loader/index.js??ref--1!node_modules/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0": "of+2",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/CYBHouschkaAltPro-Bold.otf": "qqbP",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-Bold.eot": "rJ03",
+          "node_modules/url-loader/index.js??ref--4!src/assets/fonts/GalanoGrotesque-LightItalic.svg": "wXm5",
+          "node_modules/url-loader/index.js??ref--4!src/assets/fonts/GalanoGrotesque-SemiBold.svg": "xzwO",
+          "node_modules/file-loader/index.js??ref--1!src/assets/fonts/GalanoGrotesque-Light.otf": "zliw"
+        },
+        "usedIds": {
+          "2DS0": "2DS0",
+          "4Zmj": "4Zmj",
+          "6bRT": "6bRT",
+          "8Dl6": "8Dl6",
+          "9GaS": "9GaS",
+          "9o4S": "9o4S",
+          "D8GD": "D8GD",
+          "FZ+f": "FZ+f",
+          "Fqd/": "Fqd/",
+          "GHvZ": "GHvZ",
+          "IMLV": "IMLV",
+          "JRBl": "JRBl",
+          "MyKl": "MyKl",
+          "NgJd": "NgJd",
+          "O+wT": "O+wT",
+          "Pa7Z": "Pa7Z",
+          "QnFo": "QnFo",
+          "WEP1": "WEP1",
+          "cEaC": "cEaC",
+          "cmUn": "cmUn",
+          "dltz": "dltz",
+          "fjwd": "fjwd",
+          "fv2J": "fv2J",
+          "gtkP": "gtkP",
+          "iBoZ": "iBoZ",
+          "jNsU": "jNsU",
+          "jiXG": "jiXG",
+          "kYHY": "kYHY",
+          "kZQp": "kZQp",
+          "l4Wd": "l4Wd",
+          "lC/i": "lC/i",
+          "n+F3": "n+F3",
+          "of+2": "of+2",
           "qqbP": "qqbP",
           "rJ03": "rJ03",
           "wXm5": "wXm5",

@@ -1,7 +1,7 @@
 {
-  "name": "react-redux-webpack",
+  "name": "syntel-fedex-demo-application",
   "version": "0.0.1",
-  "description": "react redux webpack and webpack server configuration",
+  "description": "Syntels Fedex demo azure application",
   "main": "/src/index.js",
   "scripts": {
     "dev": "webpack-dev-server --env development",
