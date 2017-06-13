@@ -53,6 +53,13 @@ class LandingPage extends Component {
     this._callHandWrittenApi = this._callHandWrittenApi.bind(this);
     this._onSave = this._onSave.bind(this);
 
+    this._onCaptionChange = this._onCaptionChange.bind(this);
+    this._onOcrChange = this._onOcrChange.bind(this);
+    this._onHandWrittenChange = this._onHandWrittenChange.bind(this);
+    this._onNotesChange = this._onNotesChange.bind(this);
+    this._onTagsChange = this._onTagsChange.bind(this);
+    this._onDescriptionTagsChange = this._onDescriptionTagsChange.bind(this);
+
     this.state = {
       files: [],
       index: 0,
@@ -60,6 +67,12 @@ class LandingPage extends Component {
       cosmosDB: '',
       guid: '',
       initialItems: '',
+      tags: [],
+      descriptiontags:[],
+      captionvalue:'',
+      ocrvalue:'',
+      handwrittenvalues:'',
+      notes:'',
     };
   }
 
@@ -68,8 +81,7 @@ class LandingPage extends Component {
     this.setState({ imagesArray: initialImages });
   }
 
-  _onDrop(files, rejectedFiles) {
-    console.log(files, rejectedFiles);
+  _onDrop(files) {
     this.setState({ files, index: 0 }, () => {
       this._uploadToAWS(files);
     });
@@ -81,9 +93,31 @@ class LandingPage extends Component {
     }
   }
 
+  _onTagsChange(tags) {
+    this.setState({tags});
+  }
+
+  _onDescriptionTagsChange(descriptiontags){
+    this.setState({descriptiontags});
+  }
+
+  _onCaptionChange(e){
+    this.setState({captionvalue: e.target.value});
+  }
+
+  _onOcrChange(e){
+    this.setState({ocrvalue:e.target.value});
+  }
+  _onHandWrittenChange(e){
+    this.setState({handwrittenvalues:e.target.value});
+  }
+  _onNotesChange(e){
+    this.setState({notes:e.target.value});
+  }
+
   _callApi(url) {  
     const imageBody = { url };
-    console.log(imageBody);
+
     this.props.dispatch(getVision(imageBody));
     
     this.props.dispatch(getImageUrl(url));
@@ -106,7 +140,6 @@ class LandingPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (nextProps.fetched && !nextProps.fetching) {
       let obj = {
         imgurl: nextProps.dropzoneImgUrl,
@@ -175,14 +208,46 @@ class LandingPage extends Component {
         '_ts': 1497161326,
       };
 
-      this.setState({ cosmosDB });
+      const allTags = [];
+      const alldescriptiontags = [];
+      let allcaption = '';
+
+      _.map(tags, (item) => allTags.push(JSON.parse(item).name));
+      _.map(nextProps.visionList.description.tags, (item) => alldescriptiontags.push(item));
+      _.map(captions, (item) => {
+        const data = JSON.parse(item);
+        allcaption = data.text;
+      });
+
+      this.setState({ cosmosDB, tags: allTags,descriptiontags:alldescriptiontags,captionvalue:allcaption,ocrvalue:orctags,handwrittenvalues:handwrittentags});
 
     }
 
   }
 
   _onSave() {
-    this.props.dispatch(saveToCosmosDB(this.state.cosmosDB));
+    const data = this.state.cosmosDB;
+    // data.tags = this.state.tags;
+    const alltags = [];
+    const alldesc=[];
+    const caps=[];
+
+    _.map(this.state.tags, item => {
+      alltags.push(JSON.stringify({name: item}));
+    });
+    _.map(this.state.descriptiontags, item => {
+      alldesc.push( item);
+    });
+    data.tags = alltags;
+    data.descriptiontags=alldesc;
+    
+    caps[0]=  JSON.stringify({text: this.state.captionvalue});
+   
+    data.captions = caps;
+    data.ocrtags=this.state.ocrvalue;
+    data.handwrittentags=this.state.handwrittenvalues;
+    console.log(data);
+    this.props.dispatch(saveToCosmosDB(data));
   }
 
   render() {
@@ -201,9 +266,36 @@ class LandingPage extends Component {
     }
     
     let pageData;
+    let visionFetchingProgress;
+    if (visionFetching) {
+      visionFetchingProgress = (<div className="vision-progress"><div className="status spinner">
+                                  <div className="bounce1"></div>
+                                  <div className="bounce2"></div>
+                                  <div className="bounce3"></div>
+                                </div></div>);
+    }
 
     if (visionFetched && this.state.cosmosDB) {
-      pageData = <VisionDetailPage visionFetching={visionFetching} cosmosDB={this.state.cosmosDB} onBack={this._backToDropZone} onSave={this._onSave}/>;
+      pageData = (
+          <VisionDetailPage 
+            visionFetching={visionFetching}
+            cosmosDB={this.state.cosmosDB}
+            onBack={this._backToDropZone}
+            onSave={this._onSave}
+            captionsValue={this.state.captionvalue}
+            ocrValues={this.state.ocrvalue}
+            handWritten={this.state.handwrittenvalues}
+            notesValue={this.state.notes}
+            tagsValue={this.state.tags}
+            descriptionValue={this.state.descriptiontags}
+            onCaptionChange={this._onCaptionChange}
+            onOcrChange={this._onOcrChange}
+            onHandWrittenChange={this._onHandWrittenChange}
+            onNotesChange={this._onNotesChange}
+            onTagsChange={this._onTagsChange}
+            onDescriptionTagsChange={this._onDescriptionTagsChange}
+          />
+      );
     }
 
     return (
@@ -242,6 +334,7 @@ class LandingPage extends Component {
         </div>
         <DropZonePage fetching={fetching} images={images} onDrop={this._onDrop}/>
         {pageData}
+        {visionFetchingProgress}
       </div>
     );
   }

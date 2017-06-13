@@ -89,7 +89,7 @@ class SearchPage extends Component {
     }
     let visionDetail;
     if (isvisionDetailPage) {
-      visionDetail = <VisionDetailPage cosmosDB={cosmosDB} onBack={this._hideVisionPage} />;
+      visionDetail = <VisionDetailPage search cosmosDB={cosmosDB} onBack={this._hideVisionPage} />;
     }
     return (
       <div className="search-page">

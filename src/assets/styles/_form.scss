@@ -79,7 +79,7 @@ textarea {
   &-primary {
     background-color: $blue;
     color: $white;
-    &:hover {
+    &:hover, &:focus, &:active {
       background-color: lighten($blue, 20%);
       color: $white;
     }
