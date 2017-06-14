@@ -11,8 +11,7 @@ const VisionDetailPage = ({ ...props }) => {
   if (props.search) {
     if (!_.isEmpty(props.cosmosDB.tags)) {
       badges = _.map(props.cosmosDB.tags, (item, i) => {
-        const tags = JSON.parse(item);
-        return (<span key={i}><span className="badge badge-default">{tags.name}</span>&nbsp;</span>);
+        return (<span key={i}><span className="badge badge-default">{item}</span>&nbsp;</span>);
       });
     } else {
       badges = 'No tags';
@@ -41,7 +40,11 @@ const VisionDetailPage = ({ ...props }) => {
   };
   let savebtn;
   if (props.onSave) {
-    savebtn = (<div className="modal-footer">
+    savebtn = (<div className="modal-footer d-flex justify-content-between">
+                <div>
+                  <button className="btn btn-secondary"  onClick={()=>props.onBingSearch(props.cosmosDB.url)} >BingSearch</button>
+                  <button className="btn btn-secondary" disabled={props.disableCustomVisionButton} onClick={()=>props.onCustomVisionSearch(props.cosmosDB.url)} >CustomVisionSearch</button>
+                </div>
                 <button className="btn btn-primary" onClick={props.onSave}>Save</button>
               </div>);
   }
@@ -49,10 +52,7 @@ const VisionDetailPage = ({ ...props }) => {
   let captions;
   if (props.search) {
     if (!_.isEmpty(props.cosmosDB.captions)) {
-      captions = _.map(props.cosmosDB.captions, (item, i) => {
-        const data = JSON.parse(item);
-        return (<span key={i}>{data.text}</span>);
-      });
+      captions = <span>{props.cosmosDB.captions}</span>;
     }
   } else {
     captions = <input type="text" className="form-control" value={props.captionsValue} onChange={props.onCaptionChange} />;
@@ -164,10 +164,13 @@ VisionDetailPage.propTypes = {
   onHandWrittenChange: PropTypes.func,
   notesValue: PropTypes.string,
   onNotesChange: PropTypes.func,
-  tagsValue: PropTypes.string,
+  tagsValue: PropTypes.array,
   onTagsChange: PropTypes.func,
-  descriptionValue: PropTypes.string,
+  descriptionValue: PropTypes.array,
   onDescriptionTagsChange: PropTypes.func,
+  onBingSearch:PropTypes.func,
+  onCustomVisionSearch:PropTypes.func,
+  disableCustomVisionButton: PropTypes.bool,
 };
 
 export default VisionDetailPage;

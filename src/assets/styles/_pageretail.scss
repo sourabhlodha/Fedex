@@ -478,10 +478,36 @@ button.card{
 
 .search {
   padding: 40px;
+  z-index: 999;
   .form-control {
     border: 0;
     border-radius: 2px;
     padding: 18px;
+    padding-left: 60px;
+  }
+  .dropzone {
+    margin: 0;
+    position: absolute;
+    left: 18px;
+    top: 13px;
+    z-index: 999;
+    background: transparent;
+    color: #6c0298;
+    padding: 0;
+  }
+  form {
+    position: relative;
+    .list-group {
+      position: absolute;
+      width: 100%;
+      &.fade {
+        display: none;
+      }
+      button {
+        cursor: pointer;
+      }
+    }
+    
   }
  }
 
@@ -768,7 +794,10 @@ button.card{
   }
 }
 .product-list {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  border: 1px solid #dcdcdc;
+  padding: 10px;
+  border-radius: 4px;
   .product-list-box {
     display: flex;
     align-items: center;

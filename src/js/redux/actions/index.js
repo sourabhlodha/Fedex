@@ -160,8 +160,25 @@ export const hideVisionPage = () => dispatch => {
   dispatch({ type: types.HIDE_VISION_DETAILS });
 };
 
+export const customVision = (url) => dispatch => {
+  dispatch({ type: types.CUSTOM_VISION_REQUEST });
+  post({
+    url: url,
+    success: types.CUSTOM_VISION_SUCCESS,
+    failure: types.CUSTOM_VISION_FAILURE,
+    dispatch,
+  });
+};
 
-
+export const BingSearch = (url) => dispatch => {
+  dispatch({ type: types.BING_SEARCH_REQUEST});
+  get({
+    url: url,
+    success: types.BING_SEARCH_SUCCESS,
+    failure: types.BING_SEARCH_FAILURE,
+    dispatch,
+  });
+};
 
 // https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&highlight=captions&suggesterName=sg&fuzzy=false&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
 

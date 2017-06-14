@@ -11,7 +11,7 @@ import VisionDetailPage from '../shared/VisionDetailPage';
 import Guid from 'guid';
 
 import { connect } from 'react-redux';
-import { clearAll, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, getVision, ocrVision, handWrittenVision } from '../../redux/actions';
+import { clearAll, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, getVision, ocrVision, handWrittenVision, BingSearch, customVision } from '../../redux/actions';
 
 @connect((store) => {
   return {
@@ -37,6 +37,15 @@ import { clearAll, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, g
 
     imageUrl: store.dropzone.imageUrl,
 
+    CustomVisionList: store.dropzone.CustomVisionList,
+    CustomFetching: store.dropzone.CustomFetching,
+    CustomFetched: store.dropzone.CustomFetched,
+    CustomErr: store.dropzone.CustomErr,
+    BingSearchList: store.dropzone.BingSearchList,
+    BingSearchFetching: store.dropzone.BingSearchFetching,
+    BingSearchFetched: store.dropzone.BingSearchFetched,
+    BingErr: store.dropzone.BingErr,
+
   };
 })
 
@@ -60,6 +69,9 @@ class LandingPage extends Component {
     this._onTagsChange = this._onTagsChange.bind(this);
     this._onDescriptionTagsChange = this._onDescriptionTagsChange.bind(this);
 
+    this._callBingSearchApi=this._callBingSearchApi.bind(this);
+    this._callCustomVisionApi=this._callCustomVisionApi.bind(this);
+
     this.state = {
       files: [],
       index: 0,
@@ -73,6 +85,9 @@ class LandingPage extends Component {
       ocrvalue:'',
       handwrittenvalues:'',
       notes:'',
+      currurl:'',
+      allcustom:'',
+      disableCustomVisionButton: false,
     };
   }
 
@@ -140,6 +155,24 @@ class LandingPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+
+    if(nextProps.CustomFetched && !nextProps.CustomFetching) {
+      const messages = JSON.parse(nextProps.CustomVisionList.Message);
+      const allcustomvision = this.state.descriptiontags;
+      console.log(messages);
+      _.map(messages.Predictions, items => {
+        let confidence = items.Probability;
+        confidence = confidence * 100;
+        console.log(confidence);
+        if(confidence > 50) {
+          allcustomvision.push(items.Tag);
+        }
+      });
+
+      this.setState({ descriptiontags: allcustomvision, disableCustomVisionButton: true });
+      
+    }
+
     if (nextProps.fetched && !nextProps.fetching) {
       let obj = {
         imgurl: nextProps.dropzoneImgUrl,
@@ -153,7 +186,7 @@ class LandingPage extends Component {
       });
     }
 
-    if (nextProps.visionFetched && nextProps.ocrFetched || nextProps.visionFetched && nextProps.handFetched ) {
+    if (  _.isEmpty(nextProps.CustomVisionList) && nextProps.visionFetched && nextProps.ocrFetched || _.isEmpty(nextProps.CustomVisionList) && nextProps.visionFetched && nextProps.handFetched ) {
       const allOrcText = [];
       const allHandText = [];
 
@@ -192,7 +225,7 @@ class LandingPage extends Component {
 
       const cosmosDB = {
         'captions': captions,
-        'confidence': nextProps.visionList.description.captions[0].confidence,
+        'confidence': Number(Number(nextProps.visionList.description.captions[0].confidence).toFixed(3)),
         'descriptiontags': nextProps.visionList.description.tags,
         'handwrittentags': handwrittentags,
         'id': this.state.guid,
@@ -229,11 +262,11 @@ class LandingPage extends Component {
     const data = this.state.cosmosDB;
     // data.tags = this.state.tags;
     const alltags = [];
-    const alldesc=[];
-    const caps=[];
+    const alldesc = [];
+    let caps = '';
 
     _.map(this.state.tags, item => {
-      alltags.push(JSON.stringify({name: item}));
+      alltags.push( item);
     });
     _.map(this.state.descriptiontags, item => {
       alldesc.push( item);
@@ -241,13 +274,23 @@ class LandingPage extends Component {
     data.tags = alltags;
     data.descriptiontags=alldesc;
     
-    caps[0]=  JSON.stringify({text: this.state.captionvalue});
+    caps = this.state.captionvalue;
    
     data.captions = caps;
     data.ocrtags=this.state.ocrvalue;
     data.handwrittentags=this.state.handwrittenvalues;
     console.log(data);
     this.props.dispatch(saveToCosmosDB(data));
+  }
+
+  _callBingSearchApi(query){
+    let url = 'https://api.cognitive.microsoft.com/bing/v7.0/images/search?q='+query+'&modules=SimilarProducts&en-us&subscription-key=aa6e71cbaf9f49d2a12e7e03e09e698e';
+    this.props.dispatch(BingSearch(url));
+  } 
+
+  _callCustomVisionApi(query){
+    let url = 'http://fedexovergoodservices.azurewebsites.net/api/Prediction?imageURL='+query;
+    this.props.dispatch(customVision(url));
   }
 
   render() {
@@ -294,6 +337,9 @@ class LandingPage extends Component {
             onNotesChange={this._onNotesChange}
             onTagsChange={this._onTagsChange}
             onDescriptionTagsChange={this._onDescriptionTagsChange}
+            disableCustomVisionButton={this.state.disableCustomVisionButton}
+            onBingSearch={this._callBingSearchApi}
+            onCustomVisionSearch={this._callCustomVisionApi}
           />
       );
     }
@@ -375,6 +421,12 @@ LandingPage.propTypes = {
   handFetched: PropTypes.bool,
   handFetching: PropTypes.bool,
   imageUrl: PropTypes.string,
+  CustomVisionList:PropTypes.array,
+  CustomFetching:PropTypes.bool,
+  CustomFetched:PropTypes.bool,
+  BingSearchList:PropTypes.array,
+  BingSearchFetching:PropTypes.bool,
+  BingSearchFetched:PropTypes.bool,
 };
 
 export default LandingPage;

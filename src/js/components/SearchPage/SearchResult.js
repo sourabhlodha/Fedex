@@ -2,16 +2,37 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
+import SearchFilters from './SearchFilters';
+
 const SearchResult = ({ ...props }) => {
-  const searchList = _.map(props.searchResults, (product, i) => {
+  const results = [];
+  
+  _.map(props.searchResults, product => {
+    const result = _.values(product);
+    const score = _.head(result);
+
+    const data = {
+      product,
+      score: score,
+    };
+    results.push(data);
+  });
+  
+  const productResults = _.orderBy(results, ['score'], ['desc', 'asc']);
+
+  console.log(results);
+
+  const searchList = _.map(productResults, (product, i) => {
     const productImage = {
-      'backgroundImage': product.url,
+      'backgroundImage': product.product.url,
     };
 
-    let confidence;
-    if (product.confidence) {
-      confidence = Number(parseFloat(product.confidence * 100).toFixed(0));
-    }
+    const result = _.values(product.product);
+    // console.log(_.head(val));
+    const score = _.head(result);
+
+    
+    const confidence = Number(parseFloat(score * 100).toFixed(0));
     const style = {
       'width': `${confidence}%`,
     };
@@ -21,32 +42,32 @@ const SearchResult = ({ ...props }) => {
         <div className="product-list-box">
           <div className="product-image">
             <div className="full-image"  style={productImage}></div>
-            <img src={product.url}  />
+            <img src={product.product.url}  />
           </div>
           <div className="product-desc">
             <div className="confidence display-progress">
-              <div className="title">Confidence:</div>
+              <div className="title">Search Score: <span className="badge badge-primary score-value">{score}</span></div>
               <div className="info">
                 <span className="perc">{confidence}%</span>
                 <span className="progress"><span className="progress-bar" style={style}></span></span>
               </div>
             </div>
             <div>
-              <div className="title">Hand written tags:</div>
+              <div className="title">Caption:</div>
               <div className="info">
-                {product.handwrittentags}
+                {product.product.captions ? product.product.captions : '--'}
               </div>
             </div>
             <div>
-              <div className="title">Ocr tags:</div>
+              <div className="title">Hand written tags:</div>
               <div className="info">
-                {product.ocrtags}
+                {product.product.handwrittentags ? product.product.handwrittentags : '--'}
               </div>
             </div>
           </div>
         </div>
         <div className="view-detail">
-          <button onClick={() => props.viewDetails(product)} className="btn btn-block btn-primary">View details</button>
+          <button onClick={() => props.viewDetails(product.product)} className="btn btn-block btn-primary">View details</button>
         </div>
       </div>
     );
@@ -56,7 +77,13 @@ const SearchResult = ({ ...props }) => {
     <div className="container-fluid search-result-page">
       <div className="row">
         <div className="col-sm-4">
-          <h1>Search Filter</h1>
+          <SearchFilters 
+            descriptiontags={props.descriptiontags} 
+            tags={props.tags}
+            confidence={30} 
+            toggleDescTags={props.toggleDescTags}
+            toggleItemTags={props.toggleItemTags}
+          />
         </div>
         <div className="col-sm-8">
           {searchList}
@@ -69,6 +96,10 @@ const SearchResult = ({ ...props }) => {
 SearchResult.propTypes = {
   searchResults: PropTypes.array,
   viewDetails: PropTypes.func,
+  descriptiontags: PropTypes.array,
+  tags: PropTypes.array,
+  toggleDescTags: PropTypes.func,
+  toggleItemTags: PropTypes.func,
 };
 
 export default SearchResult;

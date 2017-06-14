@@ -27,6 +27,16 @@ const initialState = {
 
   cosmosFetching: false,
 
+  CustomVisionList: '',
+  CustomFetching: false,
+  CustomFetched: false,
+  CustomErr: '',
+
+  BingSearchList: '',
+  BingSearchFetching: false,
+  BingSearchFetched: false,
+  BingErr: '',
+
 };
 const dropzone = (state = initialState, action) => {
   switch (action.type) {
@@ -51,7 +61,7 @@ const dropzone = (state = initialState, action) => {
     return {...state, imageUrl: action.body};
 
   case types.VISION_REQUEST:
-    return {...state, visionFetching: true, fetched: false, fetching: false, ocrFetched: false, ocrFetching: false, handFetched: false, handFetching: false};
+    return {...state, visionFetching: true, fetched: false, fetching: false, ocrFetched: false, ocrFetching: false, handFetched: false, handFetching: false, dropzoneImgUrl: ''};
 
   case types.VISION_SUCCESS:
     return {
@@ -67,7 +77,7 @@ const dropzone = (state = initialState, action) => {
   
 
   case types.OCR_VISION_REQUEST:
-    return {...state, ocrFetching: true, fetched: false, fetching: false};
+    return {...state, ocrFetching: true, fetched: false, fetching: false, dropzoneImgUrl: ''};
 
   case types.OCR_VISION_SUCCESS:
     return {
@@ -82,7 +92,7 @@ const dropzone = (state = initialState, action) => {
 
   
   case types.HAND_VISION_REQUEST:
-    return {...state, handFetching: true, fetched: false, fetching: false};
+    return {...state, handFetching: true, fetched: false, fetching: false, dropzoneImgUrl: ''};
 
   case types.HAND_VISION_SUCCESS:
     return {
@@ -107,7 +117,34 @@ const dropzone = (state = initialState, action) => {
   case types.SAVE_COSMOS_DB_SUCCESS:
     return {...state, visionFetched: false, visionFetching: false };
 
-  
+
+  case types.CUSTOM_VISION_REQUEST:
+    return {...state, CustomFetching: true, dropzoneImgUrl: '', fetched: false, fetching: false};
+
+  case types.CUSTOM_VISION_SUCCESS:
+    return {
+      ...state,
+      CustomFetching: false,
+      CustomFetched: true,
+      CustomVisionList: action.data,
+    };
+
+  case types.Custom_VISION_FAILURE:
+    return {...state, CustomFetching: false, handErr: action.data};
+
+  case types.BING_SEARCH_REQUEST:
+    return {...state, BingSearchFetching: true, fetched: false, fetching: false};
+
+  case types.BING_SEARCH_SUCCESS:
+    return {
+      ...state,
+      BingSearchFetching: false,
+      BingSearchFetched: true,
+      BingSearchList: action.data,
+    };  
+  case types.BING_SEARCH_FAILURE:
+    return {...state, BingSearchFetching: false, handErr: action.data};
+
   default:
     return state;
   }
