@@ -798,6 +798,7 @@ button.card{
   border: 1px solid #dcdcdc;
   padding: 10px;
   border-radius: 4px;
+  width: 100%;
   .product-list-box {
     display: flex;
     align-items: center;
@@ -815,12 +816,24 @@ button.card{
     .title {
       color: $black;
       font-size: 16px;
-      font-family: $font-bold;
+      font-family: $font-medium;
       margin-bottom: 10px;
     }
   }
-  .btn-primary {
-    background-color: #78dad2;
+  .btn-secondary {
+    color: $blue;
+    border-color: $blue;
+  }
+  .display-progress .info {
+    .progress {
+      .progress-bar {
+        height: 27px;
+      }
+    }
+    .perc {
+      font-size: 19px;
+      font-family: $font-medium;
+    }
   }
 }
 

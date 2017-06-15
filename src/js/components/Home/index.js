@@ -127,7 +127,7 @@ class Home extends Component {
     this.setState({handwrittenvalues:e.target.value});
   }
   _onNotesChange(e){
-    this.setState({notes:e.target.value});
+    this.setState({ notes: e.target.value });
   }
 
   _callApi(url) {  
@@ -159,11 +159,9 @@ class Home extends Component {
     if(nextProps.CustomFetched && !nextProps.CustomFetching) {
       const messages = JSON.parse(nextProps.CustomVisionList.Message);
       const allcustomvision = this.state.descriptiontags;
-      console.log(messages);
       _.map(messages.Predictions, items => {
         let confidence = items.Probability;
         confidence = confidence * 100;
-        console.log(confidence);
         if(confidence > 50) {
           allcustomvision.push(items.Tag);
         }
@@ -234,6 +232,7 @@ class Home extends Component {
         '_rid': 'uuJBAOIBdAIBAAAAAAAAAA==',
         'tags': tags,
         'url': nextProps.imageUrl,
+        'notes': '',
         'metadata': nextProps.visionList.metadata,
         '_self': 'dbs/uuJBAA==/colls/uuJBAOIBdAI=/docs/uuJBAOIBdAIBAAAAAAAAAA==/',
         '_etag': '"03000a12-0000-0000-0000-593cde6e0000"',
@@ -260,7 +259,7 @@ class Home extends Component {
 
   _onSave() {
     const data = this.state.cosmosDB;
-    // data.tags = this.state.tags;
+
     const alltags = [];
     const alldesc = [];
     let caps = '';
@@ -277,8 +276,9 @@ class Home extends Component {
     caps = this.state.captionvalue;
    
     data.captions = caps;
-    data.ocrtags=this.state.ocrvalue;
-    data.handwrittentags=this.state.handwrittenvalues;
+    data.ocrtags = this.state.ocrvalue;
+    data.handwrittentags = this.state.handwrittenvalues;
+    data.notes = this.state.notes;
     console.log(data);
     this.props.dispatch(saveToCosmosDB(data));
   }

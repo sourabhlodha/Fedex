@@ -182,11 +182,9 @@ class SearchPage extends Component {
       this._callApi(nextProps.dropzoneImgUrl);
     }
 
-    if (nextProps.fetching) {
-      this.setState({ apiCall: 0 });
-    }
-
-    
+    // if (nextProps.fetching) {
+    //   this.setState({ apiCall: 0 });
+    // }
 
     if (nextProps.callApi) {
       this.setState({ apiCall: this.state.apiCall + 1 }, ()=> {
@@ -196,8 +194,10 @@ class SearchPage extends Component {
           const tags = [];
           const captions = [];
           let descriptiontags;
+
           if (!_.isEmpty(nextProps.ocrList)){
             if(!_.isEmpty(nextProps.ocrList.regions)) {
+              console.log('is ocr available');
               _.map(nextProps.ocrList.regions, region => {
                 _.map(region.lines, line => {
                   _.map(line.words, word => {
@@ -205,24 +205,28 @@ class SearchPage extends Component {
                   });
                 });
               });
+              captions.push(_.join(allOrcText, ' '));
             }
           }
           
-          captions.push(_.join(allOrcText, ' '));
+          
 
           if(!_.isEmpty(nextProps.handList)) {
             if (!_.isEmpty(nextProps.handList.recognitionResult)) {
               _.map(nextProps.handList.recognitionResult.lines, line => {
                 allHandText.push(line.text);
               });
+              captions.push(_.join(allHandText, ' '));
             }
           }
 
           
-          captions.push(_.join(allHandText, ' '));
+          
 
           if (!_.isEmpty(nextProps.visionList)) {
+            console.log('visionlist');
             if (!_.isEmpty(nextProps.visionList.description.captions)) {
+              console.log(nextProps.visionList.description.captions[0].text);
               captions.push(nextProps.visionList.description.captions[0].text);
             }
             if (!_.isEmpty(nextProps.visionList.description.tags)) {
@@ -232,9 +236,15 @@ class SearchPage extends Component {
               _.map(nextProps.visionList.tags, item => tags.push(item.name));
             }
           }
-
-          const searchValue = _.join(captions, ' ');
+          let searchValue;
+          if (captions.length > 1) {
+            searchValue = _.join(captions, ' ');
+          } else {
+            searchValue = captions[0];
+          }
           const itemtags = tags;
+
+          // console.log(searchValue, itemtags, descriptiontags);
 
           this.setState({ searchValue, itemtags, descriptiontags}, () => {
             this._callSearchService();
@@ -245,7 +255,7 @@ class SearchPage extends Component {
   }
 
   render() {
-    const { searchResult, isvisionDetailPage, fetching, dzFetching, fetched, cosmosDB } = this.props;
+    const { searchResult, isvisionDetailPage, fetching, fetched, cosmosDB } = this.props;
     let searchResultPage;
     let noresult;
     if (fetched) {
@@ -266,7 +276,7 @@ class SearchPage extends Component {
     }
 
     let loading;
-    if(fetching || dzFetching) {
+    if(fetching) {
       loading = (<div className="progress"><div className="status spinner">
                       <div className="bounce1"></div>
                       <div className="bounce2"></div>
@@ -274,6 +284,7 @@ class SearchPage extends Component {
                     </div></div>);
     }
     let visionDetail;
+
     if (isvisionDetailPage) {
       visionDetail = <VisionDetailPage search cosmosDB={cosmosDB} onBack={this._hideVisionPage} />;
     }
@@ -334,6 +345,9 @@ SearchPage.propTypes = {
   searchResult: PropTypes.object,
   fetching: PropTypes.bool,
   dzFetching: PropTypes.bool,
+  visionFetching: PropTypes.bool,
+  handFetching: PropTypes.bool,
+  ocrFetching: PropTypes.bool,
   callApi: PropTypes.bool,
   fetched: PropTypes.bool,
   isvisionDetailPage: PropTypes.bool,

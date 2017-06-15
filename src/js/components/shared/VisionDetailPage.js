@@ -4,9 +4,7 @@ import _ from 'lodash';
 import TagsInput from 'react-tagsinput';
 
 
-const VisionDetailPage = ({ ...props }) => {
-  console.log(props.cosmosDB);
-  
+const VisionDetailPage = ({ ...props }) => {  
   let badges;
   if (props.search) {
     if (!_.isEmpty(props.cosmosDB.tags)) {
@@ -76,7 +74,12 @@ const VisionDetailPage = ({ ...props }) => {
   }
 
   let notes;
-  if (!props.search) {
+  if (props.search) {
+    notes = (<li>
+              <div className="title">Notes</div>
+              {props.cosmosDB.notes}
+            </li>);
+  } else {
     notes = (<li>
               <div className="title">Notes</div>
               <textarea placeholder="Add notes about this product" className="form-control" value={props.notesValue} onChange={props.onNotesChange} rows="2"></textarea>

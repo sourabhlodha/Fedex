@@ -21,7 +21,6 @@ export const login = ({ email, password }) => dispatch => {
 };
 
 export const loginWithToken = () => (dispatch, getState) => {
-  // console.log(getState().user);
   const token = getState().user.loginDetail;
 
   if (_.isEmpty(token)) return;
@@ -76,10 +75,7 @@ export const getImageList = () => dispatch => {
 export const uploadAzure = (file) => dispatch => {
   dispatch({ type: types.DROPZONE_REQUEST});
   const req = request.post('http://fedexovergoodservices.azurewebsites.net/api/Upload/user/PostUserImage');
-  // files.forEach(file => {
-  console.log(file);
   req.attach(file.name, file);
-  // });
   req.end((err, res) => {
     if (res) {
       const data = JSON.parse(res.text);
@@ -93,7 +89,6 @@ export const uploadAzure = (file) => dispatch => {
 
 export const ocrVision = (body) => dispatch => {
   dispatch({ type: types.OCR_VISION_REQUEST });
-  console.log(body);
   post({
     url: urls.OCRVISIONAPI,
     body: body,
@@ -105,7 +100,6 @@ export const ocrVision = (body) => dispatch => {
 
 export const handWrittenVision = (body) => dispatch => {
   dispatch({ type: types.HAND_VISION_REQUEST });
-  console.log(body);
   post({
     url: urls.HANDWRITTENVISIONAPI,
     body: body,
@@ -126,7 +120,6 @@ export const clearAll = () => dispatch => {
 
 
 export const saveToCosmosDB = (body) => dispatch => {
-  console.log(JSON.stringify(body));
   dispatch({ type: types.SAVE_COSMOS_DB_REQUEST });
   post({
     url: 'http://fedexovergoodservices.azurewebsites.net/api/Overgood/Create',
