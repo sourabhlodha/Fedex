@@ -512,7 +512,7 @@ button.card{
  }
 
  .landingPage {
-   padding-top: 60px;
+   padding-top: 20px;
  }
  .card {
    h4{
@@ -563,10 +563,10 @@ button.card{
  }
 
 .dropzone {
-    padding: 30px 0;
+    padding: 20px 0;
     text-align: center;
-    max-width: 800px;
-    margin: 30px auto 40px;
+    max-width: 100%;
+    margin: 30px auto;
     background: #6c0298;
     color: white;
     font-size: 23px;
@@ -584,32 +584,55 @@ button.card{
   min-height: 250px;
 }
 .img-upload-list {
-  width: 800px;
+  width: 100%;
   margin: 0 auto;
   ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    flex-flow: row wrap;
+    justify-content: center;
     li {
-      display: flex;
-      padding: 20px;
       border-bottom: 1px solid #ecdcf3;
-      align-items: center;
-      background-color: #faefff;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-flex: 1;
+      -webkit-flex: 0 0 0%;
+      -ms-flex: 0 0 0%;
+      flex: 0 0 0%;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column; 
+      padding: 15px;
+      .dzblock{
+        width: 100%;
+        background-color: #faefff;
+      }
       .thumb{
-        width: 70px;
+        width: 150px;
         position: relative;
-        height: 70px;
+        height: 150px;
         border-radius: 2px;
         overflow: hidden;
+        margin-bottom: 20px;
         >div {
           background-position: center center;
           background-repeat: no-repeat;
-          background-size: cover;
+          background-size: contain;
           height: 100%;
           width: 100%;
           position: absolute;
         }
+      }
+      .status {
+          padding: 20px;
+          text-align: center;
       }
       .file-name{
         padding: 0 40px;
@@ -907,4 +930,12 @@ button.card{
       left: 50%;
       transform: translate(-50%);
     }
+}
+
+.bing-search{
+  padding-top: 40px;
+  .card {
+    margin-bottom: 20px;
+    border-color: $blue;
+  }
 }

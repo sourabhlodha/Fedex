@@ -38,9 +38,10 @@ const VisionDetailPage = ({ ...props }) => {
   };
   let savebtn;
   if (props.onSave) {
+    const text = JSON.parse(props.cosmosDB.captions);
     savebtn = (<div className="modal-footer d-flex justify-content-between">
                 <div>
-                  <button className="btn btn-secondary"  onClick={()=>props.onBingSearch(props.cosmosDB.url)} >BingSearch</button>
+                  <button className="btn btn-secondary"  onClick={()=>props.onBingSearch(text.text)} >BingSearch</button>
                   <button className="btn btn-secondary" disabled={props.disableCustomVisionButton} onClick={()=>props.onCustomVisionSearch(props.cosmosDB.url)} >CustomVisionSearch</button>
                 </div>
                 <button className="btn btn-primary" onClick={props.onSave}>Save</button>

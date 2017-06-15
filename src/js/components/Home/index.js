@@ -7,6 +7,7 @@ import topuploadspeeds from '../../../assets/images/topuploadspeeds.png';
 
 import DropZonePage from './DropZonePage';
 import VisionDetailPage from '../shared/VisionDetailPage';
+import { Redirect } from 'react-router-dom';
 
 import Guid from 'guid';
 
@@ -41,6 +42,7 @@ import { clearAll, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, g
     CustomFetching: store.dropzone.CustomFetching,
     CustomFetched: store.dropzone.CustomFetched,
     CustomErr: store.dropzone.CustomErr,
+    
     BingSearchList: store.dropzone.BingSearchList,
     BingSearchFetching: store.dropzone.BingSearchFetching,
     BingSearchFetched: store.dropzone.BingSearchFetched,
@@ -295,8 +297,14 @@ class Home extends Component {
 
   render() {
 
-    const { fetching, visionFetching, visionFetched } = this.props;
-  
+    
+
+    const {BingSearchList, fetching, visionFetching, visionFetched } = this.props;
+    
+    if(!_.isEmpty(BingSearchList.value)) {
+      return <Redirect to="/search-assets" />;
+    }
+
     let images;
 
     if (!_.isEmpty(this.state.imagesArray)) {
@@ -304,7 +312,7 @@ class Home extends Component {
         const status = <div className="status"><button className="btn btn-primary" type="button" onClick={() => this._callApi(f.imgurl)}>View</button></div>;
         const style = { 'backgroundImage': `url(${f.imgurl})`};
 
-        return (<li key={i} className="dropzoneItems"> <div className="thumb"><div className="image-thumb" style={style}></div></div> <div className="file-name">{f.name}</div> {status}</li>);
+        return (<li key={i} className="dropzoneItems"><div className="dzblock"><div className="thumb"><div className="image-thumb" style={style}></div></div>{status}</div></li>);
       });
     }
     
@@ -388,19 +396,19 @@ class Home extends Component {
 
 const initialImages = [
   {
-    imgurl: 'https://asgtagur.blob.core.windows.net/aap-uploads/20160718G0001_1.jpg',
+    imgurl: 'https://asgtagur.blob.core.windows.net/ai-test/DesPath/0131736369-63169.jpg',
     name: 'image name1',
   },
   {
-    imgurl: 'https://asgtagur.blob.core.windows.net/aap-uploads/20160718G0005_1.jpg',
+    imgurl: 'https://asgtagur.blob.core.windows.net/ai-test/DesPath/DesPath5019768_13.jpg',
     name: 'image name2',
   },
   {
-    imgurl: 'https://asgtagur.blob.core.windows.net/aap-uploads/20160718G0016_2.jpg',
+    imgurl: 'https://asgtagur.blob.core.windows.net/ai-test/DesPath/5528403_23.jpg',
     name: 'image name3',
   },
   {
-    imgurl: 'https://asgtagur.blob.core.windows.net/aap-uploads/20160718G0005_1.jpg',
+    imgurl: 'https://asgtagur.blob.core.windows.net/ai-test/DesPath/DesPath5017856_2.jpg',
     name: 'image name4',
   },
 ];

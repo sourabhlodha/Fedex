@@ -7,6 +7,7 @@ import _ from 'lodash';
 import SearchResult from './SearchResult';
 import VisionDetailPage from '../shared/VisionDetailPage';
 import SearchDropZone from './SearchDropZone';
+import BingSearchResult from './BingSearchResult';
 
 import axios from 'axios';
 
@@ -37,6 +38,8 @@ import {onSearch, uploadAzure, clearSearch, showVisionPage, hideVisionPage, getV
     handFetched: store.search.handFetched,
 
     callApi: store.search.callApi,
+
+    BingSearchList: store.dropzone.BingSearchList,
 
   };
 })
@@ -97,7 +100,7 @@ class SearchPage extends Component {
   }
 
   _onSuggest(value) {
-    const url = `https://fedexovergoods.search.windows.net/indexes/temp1/docs/suggest?search=${value}&suggesterName=overgoodssearch&fuzzy=false&api-version=2016-09-01&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+    const url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs/suggest?search=${value}&suggesterName=overgoodssearch&fuzzy=false&api-version=2016-09-01&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
 
     axios.get(url)
     .then(response => {
@@ -107,7 +110,7 @@ class SearchPage extends Component {
   }
 
   _callSearchService() {
-    let url = `https://fedexovergoods.search.windows.net/indexes/temp1/docs?api-version=2016-09-01&search=${this.state.searchValue}&$orderby=confidence asc&highlight=ocrtags&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+    let url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs?api-version=2016-09-01&search=${this.state.searchValue}&$orderby=confidence asc&highlight=ocrtags&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
     let filterParam = '&$filter=';
 
     const tagParam = [];
@@ -122,7 +125,7 @@ class SearchPage extends Component {
     filterParam += _.join(tagParam, ' or ');
 
     if (!_.isEmpty(this.state.descriptiontags) || !_.isEmpty(this.state.itemtags)) {
-      url = `https://fedexovergoods.search.windows.net/indexes/temp1/docs?api-version=2016-09-01&search=${this.state.searchValue}${filterParam}&$orderby=confidence asc&highlight=ocrtags&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+      url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs?api-version=2016-09-01&search=${this.state.searchValue}${filterParam}&$orderby=confidence asc&highlight=ocrtags&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
     }
     
     this.props.dispatch(onSearch(url));
@@ -255,7 +258,7 @@ class SearchPage extends Component {
   }
 
   render() {
-    const { searchResult, isvisionDetailPage, fetching, fetched, cosmosDB } = this.props;
+    const { searchResult, BingSearchList, isvisionDetailPage, fetching, fetched, cosmosDB } = this.props;
     let searchResultPage;
     let noresult;
     if (fetched) {
@@ -273,6 +276,8 @@ class SearchPage extends Component {
         toggleDescTags={this._toggleDescTags}
         toggleItemTags={this._toggleItemTags}
       />;
+    } else if (!_.isEmpty(BingSearchList)) {
+      searchResultPage = <BingSearchResult searchResults={BingSearchList.value} />;
     }
 
     let loading;
@@ -356,6 +361,7 @@ SearchPage.propTypes = {
   visionList: PropTypes.object,
   ocrList: PropTypes.object,
   handList: PropTypes.object,
+  BingSearchList: PropTypes.object,
 };  
 
 
