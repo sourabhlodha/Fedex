@@ -11,6 +11,10 @@ const Header = () => {
         <ul className="navbar-nav mr-auto">
           <li className="nav-item">
               <NavLink exact to="/" className="nav-link" activeClassName="selected">Home</NavLink>
+              
+          </li>
+          <li className="nav-item">
+            <NavLink exact to="/search-assets" className="nav-link" activeClassName="selected">Search Assets</NavLink>
           </li>
         </ul>
       </div>

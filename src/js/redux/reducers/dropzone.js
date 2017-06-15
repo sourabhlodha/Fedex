@@ -42,7 +42,41 @@ const dropzone = (state = initialState, action) => {
   switch (action.type) {
   
   case types.CLEAR_ALL:
-    return { ...state, dropzoneImgUrl: '', fetched: false, fetching: false, visionList: '', visionFetching: false, visionFetched: false, ocrFetched: false, ocrFetching: false, handFetched: false, handFetching: false, imageUrl: '' };
+    return { ...state, 
+      imageUrl: '',
+      dropzoneImgUrl: '',
+      fetching: false,
+      fetched: false,
+      err: '',
+
+      visionList: '',
+      visionFetching: false,
+      visionFetched: false,
+      visionErr: '',
+
+      
+      ocrList: {},
+      ocrFetching: false,
+      ocrFetched: false,
+      ocrErr: '',
+      
+      handList: {},
+      handFetching: false,
+      handFetched: false,
+      hand: '',
+
+      cosmosFetching: false,
+
+      CustomVisionList: '',
+      CustomFetching: false,
+      CustomFetched: false,
+      CustomErr: '',
+
+      BingSearchList: '',
+      BingSearchFetching: false,
+      BingSearchFetched: false,
+      BingErr: '',
+    };
 
   case types.DROPZONE_REQUEST :
     return {...state, fetching: true, visionFetched: false, visionFetching: false, ocrFetched: false, ocrFetching: false, handFetched: false, handFetching: false};

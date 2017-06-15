@@ -1,27 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Route, Redirect, withRouter } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Async from 'react-code-splitting';
-
-import Login from './components/Auth/Login';
-
 import Header from './shared/Header';
 
 const Home = () => <Async load={import('./components/Home')} />;
+const SearchPage = () => <Async load={import('./components/SearchPage')} />;
 
-const App = ({ user }) => (
+const App = () => (
   <div>
     <Header />
-    {user.user.token
-      ? <Route path="/" component={Home} />
-      : <Redirect to="/login" />}
-    <Route path="/login" component={Login} />
+    <Route exact path="/" component={Home} />
+    <Route path="/search-assets" component={SearchPage} />
   </div>
 );
 
-App.propTypes = {
-  user: PropTypes.shape({}).isRequired,
-};
+// App.propTypes = {
+//   user: PropTypes.shape({}).isRequired,
+// };
 
-export default withRouter(connect(state => ({ user: state.user }))(App));
+// export default withRouter(connect(state => ({ user: state.user }))(App));
+export default App;

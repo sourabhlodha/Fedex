@@ -34,6 +34,38 @@ const initialState = {
 
 const search = (state = initialState, action) => {
   switch (action.type) {
+  case types.ON_CLEAR_SEARCH:
+    return {
+      ...state,
+      searchResult: {},
+      fetching: false,
+      fetched: false,
+      isvisionDetailPage: false,
+      cosmosDB: {},
+      err: '',
+
+      dropzoneImgUrl: '',
+      dzFetching: false,
+      dzFetched: false,
+      dzErr: '',
+
+      visionList: {},
+      visionFetching: false,
+      visionFetched: false,
+      visionErr: '',
+    
+      ocrList: {},
+      ocrFetching: false,
+      ocrFetched: false,
+      ocrErr: '',
+      
+      handList: {},
+      handFetching: false,
+      handFetched: false,
+      hand: '',
+
+      callApi: false,
+    };
   case types.ON_SEARCH_REQUEST :
     return {...state, fetching: true, callApi: false, isvisionDetailPage: false, dropzoneImgUrl: '', visionList: {}, ocrList: {}, handList: {}};
 
@@ -48,9 +80,6 @@ const search = (state = initialState, action) => {
   case types.ON_SEARCH_FAILURE:
     return {...state, fetching: false, err: action.data};
   
-  case types.ON_CLEAR_SEARCH:
-    return {...state, searchResult: {}, isvisionDetailPage: false, fetching: false, fetched: false, err: '', dropzoneImgUrl: '', visionList: {}, ocrList: {}, handList: {}, callApi: false};
-
   case types.SHOW_VISION_DETAILS: 
     return {...state, isvisionDetailPage: true, cosmosDB: action.data, dropzoneImgUrl: '', visionList: {}, ocrList: {}, handList: {}, callApi: false };
 
