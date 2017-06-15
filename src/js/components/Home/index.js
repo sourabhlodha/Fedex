@@ -75,11 +75,12 @@ class Home extends Component {
     this._onTagsChange = this._onTagsChange.bind(this);
     this._onDescriptionTagsChange = this._onDescriptionTagsChange.bind(this);
 
-    this._callBingSearchApi=this._callBingSearchApi.bind(this);
-    this._callCustomVisionApi=this._callCustomVisionApi.bind(this);
-    this._callLuisApi=this._callLuisApi.bind(this);
-    this._callLocalStorage=this._callLocalStorage(this);
-    this._checkDataEverySecond=this._checkDataEverySecond(this);
+    this._callBingSearchApi = this._callBingSearchApi.bind(this);
+    this._callCustomVisionApi = this._callCustomVisionApi.bind(this);
+    this._callLuisApi = this._callLuisApi.bind(this);
+    // this._callLocalStorage = this._callLocalStorage.bind(this);
+    // this._tick = this._tick.bind(this);
+    // this._checkText = this._checkText.bind(this);
 
     this.state = {
       files: [],
@@ -98,6 +99,8 @@ class Home extends Component {
       allcustom:'',
       disableCustomVisionButton: false,
       secondsElapsed: 0,
+      getText: '',
+      count: 0,
     };
   }
 
@@ -170,24 +173,57 @@ class Home extends Component {
     this.props.dispatch(LuisSearch(url));
   }
 
-  _callLocalStorage(){
-    console.log('update');
-    if (localStorage.getItem('1')) {
-      // const locallength=localStorage.length-1 ;
-      let luistext = JSON.parse(localStorage.getItem('1'));
-      console.log(luistext[0]);
-      // this.callLuisApi(luistext.text);
-    }
-  }
+  // _callLocalStorage() {
+  //   if (localStorage.getItem('1')) {
+  //     // const locallength=localStorage.length-1 ;
+  //     let luistext = JSON.parse(localStorage.getItem('1'));
+  //     console.log(luistext[0]);
+  //     // this.callLuisApi(luistext.text);
+  //   }
+  // }
 
-  _checkDataEverySecond(){
-    this.setState({secondsElapsed: this.state.secondsElapsed + 1});
-    this._callLocalStorage;
-  } 
-  componentDidMount() {
-    this.interval = setInterval(this._checkDataEverySecond, 1000);
+  // _checkDataEverySecond(){
+  //   this.setState({secondsElapsed: this.state.174 + 1});
+  //   this._callLocalStorage;
+  // } 
+  // componentDidMount() {
+  //   this.interval = setInterval(this._checkDataEverySecond, 1000);
     
-  }
+  // }
+
+  // _tick() {
+  //   // console.log('tick');
+  //   if(localStorage.getItem(1)) {
+  //     const storageValue = JSON.parse(localStorage.getItem(1));
+  //     console.log('>>>>>>>>>>>>>>>>>>');
+  //     console.log(storageValue[0].text);
+  //     console.log(this.state.getText);
+  //     console.log('>>>>>>>>>>>>>>>>>>');
+  //     if(storageValue[0].text != this.state.getText) {
+  //       console.log('****');
+  //       // this.setState({count: this.state.count + 1}, () => {
+  //         // if (this.state.count === 1) {
+  //       this.setState({ getText: storageValue[0].text }, () => {
+  //         this._checkText();
+  //       });
+  //         // }
+  //       // });
+  //     }
+  //     // console.log();
+  //   }
+  // }
+
+  // _checkText() {
+  //   console.log('=======');
+  //   console.log(this.state.getText);
+  // }
+
+  // componentDidMount() {
+  //   this.interval = setInterval(this._tick, 1000);
+  // } 
+  // componentWillUnmount() {
+  //   clearInterval(this.interval);
+  // }
 
   componentWillReceiveProps(nextProps) {
 

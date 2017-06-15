@@ -1033,14 +1033,15 @@
                   var arr=[];
                   // console.log(database.history.activities);
                   // console.log('length'+database.history.activities.length)
-                  for(var i=0;i<database.history.activities.length;i++){
+                  console.log(database.history.activities);
+                  for(var i = 0; i < database.history.activities.length; i++){
                     arr.push(database.history.activities[i]);
                   }
                    console.log(arr);
-                   var count=1;
-                   var key=count.toString();
+                   var count = 1;
+                   var key = count.toString();
                    if (typeof(Storage) !== "undefined") {
-                     localStorage.setItem(key,JSON.stringify(arr));
+                     localStorage.setItem(key, JSON.stringify(arr));
                      console.log(JSON.parse(localStorage.getItem(key)));
                      count++;
                    } else {
