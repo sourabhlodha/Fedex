@@ -1029,20 +1029,22 @@
               return r.__extends(n, e), n.prototype.handleIncomingActivity = function(e) {
                   var t = this.store.getState();
                   // console.log(t);
-                  var database=t;
-                  var arr=[];
+                  var database = t;
+                  var arr = '';
                   // console.log(database.history.activities);
                   // console.log('length'+database.history.activities.length)
-                  console.log(database.history.activities);
+                  // console.log(database.history.activities);
                   for(var i = 0; i < database.history.activities.length; i++){
-                    arr.push(database.history.activities[i]);
+                    if (!database.history.activities[i].channelId) {
+                      arr = database.history.activities[i].text;
+                    };
                   }
-                   console.log(arr);
+                  //  console.log(arr);
                    var count = 1;
                    var key = count.toString();
                    if (typeof(Storage) !== "undefined") {
-                     localStorage.setItem(key, JSON.stringify(arr));
-                     console.log(JSON.parse(localStorage.getItem(key)));
+                     localStorage.setItem(key, arr);
+                    //  console.log(localStorage.getItem(key));
                      count++;
                    } else {
                      console.log('browser not supported');

@@ -58,8 +58,8 @@ import { clearAll,LuisSearch, saveToCosmosDB, getImageUrl, goToDropZonePage, upl
 
 class Home extends Component {
   
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this._onDrop = this._onDrop.bind(this);
     this._uploadToAWS = this._uploadToAWS.bind(this);
     this._callApi = this._callApi.bind(this);
@@ -78,9 +78,8 @@ class Home extends Component {
     this._callBingSearchApi = this._callBingSearchApi.bind(this);
     this._callCustomVisionApi = this._callCustomVisionApi.bind(this);
     this._callLuisApi = this._callLuisApi.bind(this);
-    // this._callLocalStorage = this._callLocalStorage.bind(this);
-    // this._tick = this._tick.bind(this);
-    // this._checkText = this._checkText.bind(this);
+    this._tick = this._tick.bind(this);
+    this._checkText = this._checkText.bind(this);
 
     this.state = {
       files: [],
@@ -101,11 +100,13 @@ class Home extends Component {
       secondsElapsed: 0,
       getText: '',
       count: 0,
+      gotoNextPage: false,
     };
   }
 
 
   componentWillMount() {
+    localStorage.clear();
     this.props.dispatch(clearAll());
     this.setState({ imagesArray: initialImages });
   }
@@ -173,57 +174,34 @@ class Home extends Component {
     this.props.dispatch(LuisSearch(url));
   }
 
-  // _callLocalStorage() {
-  //   if (localStorage.getItem('1')) {
-  //     // const locallength=localStorage.length-1 ;
-  //     let luistext = JSON.parse(localStorage.getItem('1'));
-  //     console.log(luistext[0]);
-  //     // this.callLuisApi(luistext.text);
-  //   }
-  // }
 
-  // _checkDataEverySecond(){
-  //   this.setState({secondsElapsed: this.state.174 + 1});
-  //   this._callLocalStorage;
-  // } 
-  // componentDidMount() {
-  //   this.interval = setInterval(this._checkDataEverySecond, 1000);
-    
-  // }
+  _tick() {
+    if(localStorage.getItem(1)) {
+      const storageValue = localStorage.getItem(1);
+      if(storageValue != this.state.getText) {
 
-  // _tick() {
-  //   // console.log('tick');
-  //   if(localStorage.getItem(1)) {
-  //     const storageValue = JSON.parse(localStorage.getItem(1));
-  //     console.log('>>>>>>>>>>>>>>>>>>');
-  //     console.log(storageValue[0].text);
-  //     console.log(this.state.getText);
-  //     console.log('>>>>>>>>>>>>>>>>>>');
-  //     if(storageValue[0].text != this.state.getText) {
-  //       console.log('****');
-  //       // this.setState({count: this.state.count + 1}, () => {
-  //         // if (this.state.count === 1) {
-  //       this.setState({ getText: storageValue[0].text }, () => {
-  //         this._checkText();
-  //       });
-  //         // }
-  //       // });
-  //     }
-  //     // console.log();
-  //   }
-  // }
+        this.setState({ getText: storageValue }, () => {
+          this._checkText();
+        });
+      }
+    }
+  }
 
-  // _checkText() {
-  //   console.log('=======');
-  //   console.log(this.state.getText);
-  // }
+  _checkText() {
+    const splittext = _.toLower(this.state.getText);
+    const indexOfText = splittext.indexOf('search');
+    if (indexOfText >= 0) {
+      this.setState({gotoNextPage: true});
+    }
 
-  // componentDidMount() {
-  //   this.interval = setInterval(this._tick, 1000);
-  // } 
-  // componentWillUnmount() {
-  //   clearInterval(this.interval);
-  // }
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(this._tick, 1000);
+  } 
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
 
   componentWillReceiveProps(nextProps) {
 
@@ -366,11 +344,9 @@ class Home extends Component {
 
   render() {
 
-    
-
     const {BingSearchList, fetching, visionFetching, visionFetched } = this.props;
     
-    if(!_.isEmpty(BingSearchList.value)) {
+    if(!_.isEmpty(BingSearchList.value) || this.state.gotoNextPage) {
       return <Redirect to="/search-assets" />;
     }
 
@@ -507,6 +483,7 @@ Home.propTypes = {
   LuisList:PropTypes.array,
   Luisfetching:PropTypes.bool,
   Luisfetched:PropTypes.bool,
+  history: PropTypes.func,
 
 };
 
