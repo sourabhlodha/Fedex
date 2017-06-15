@@ -173,6 +173,16 @@ export const BingSearch = (url) => dispatch => {
   });
 };
 
+export const LuisSearch = (url) => dispatch => {
+  dispatch({ type: types.LUIS_SEARCH_REQUEST});
+  get({
+    url: url,
+    success: types.LUIS_SEARCH_SUCCESS,
+    failure: types.LUIS_SEARCH_FAILURE,
+    dispatch,
+  });
+};
+
 // https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&highlight=captions&suggesterName=sg&fuzzy=false&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
 
 // https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
