@@ -12,7 +12,7 @@ import { Redirect } from 'react-router-dom';
 import Guid from 'guid';
 
 import { connect } from 'react-redux';
-import { clearAll, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, getVision, ocrVision, handWrittenVision, BingSearch, customVision } from '../../redux/actions';
+import { clearAll,LuisSearch, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, getVision, ocrVision, handWrittenVision, BingSearch, customVision } from '../../redux/actions';
 
 @connect((store) => {
   return {
@@ -48,6 +48,10 @@ import { clearAll, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, g
     BingSearchFetched: store.dropzone.BingSearchFetched,
     BingErr: store.dropzone.BingErr,
 
+    LuisList:store.luissearch.LuisList,
+    Luisfetching:store.luissearch.LuisList,
+    Luisfetched:store.luissearch.LuisList,
+
   };
 })
 
@@ -73,6 +77,9 @@ class Home extends Component {
 
     this._callBingSearchApi=this._callBingSearchApi.bind(this);
     this._callCustomVisionApi=this._callCustomVisionApi.bind(this);
+    this._callLuisApi=this._callLuisApi.bind(this);
+    this._callLocalStorage=this._callLocalStorage(this);
+    this._checkDataEverySecond=this._checkDataEverySecond(this);
 
     this.state = {
       files: [],
@@ -90,8 +97,10 @@ class Home extends Component {
       currurl:'',
       allcustom:'',
       disableCustomVisionButton: false,
+      secondsElapsed: 0,
     };
   }
+
 
   componentWillMount() {
     this.props.dispatch(clearAll());
@@ -154,6 +163,30 @@ class Home extends Component {
 
   _backToDropZone() {
     this.props.dispatch(goToDropZonePage());
+  }
+
+  _callLuisApi(query){
+    let url='https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/d253b74b-9a8b-48f3-b575-2426974e58fc?subscription-key=b9ca6133dd894d7098d1e1e74e5af3a9&timezoneOffset=0&verbose=true&q='+query;
+    this.props.dispatch(LuisSearch(url));
+  }
+
+  _callLocalStorage(){
+    console.log('update');
+    if (localStorage.getItem('1')) {
+      // const locallength=localStorage.length-1 ;
+      let luistext = JSON.parse(localStorage.getItem('1'));
+      console.log(luistext[0]);
+      // this.callLuisApi(luistext.text);
+    }
+  }
+
+  _checkDataEverySecond(){
+    this.setState({secondsElapsed: this.state.secondsElapsed + 1});
+    this._callLocalStorage;
+  } 
+  componentDidMount() {
+    this.interval = setInterval(this._checkDataEverySecond, 1000);
+    
   }
 
   componentWillReceiveProps(nextProps) {
@@ -435,6 +468,10 @@ Home.propTypes = {
   BingSearchList:PropTypes.array,
   BingSearchFetching:PropTypes.bool,
   BingSearchFetched:PropTypes.bool,
+  LuisList:PropTypes.array,
+  Luisfetching:PropTypes.bool,
+  Luisfetched:PropTypes.bool,
+
 };
 
 export default Home;
