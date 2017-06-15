@@ -11,18 +11,15 @@
 }
 
 
-@include font-face(CYBHouschkaAltProBold, '../fonts/CYBHouschkaAltPro-Bold', 'otf', 'opentype');
-@include font-face(CYBHouschkaAltProLight, '../fonts/CYBHouschkaAltPro-Light', 'otf', 'opentype');
-@include font-face(CYBHouschkaAltProMedium, '../fonts/CYBHouschkaAltPro-Medium', 'otf', 'opentype');
-@include font-face(GalanoGrotesqueLight, '../fonts/GalanoGrotesque-Light', 'otf', 'opentype');
-@include font-face(GalanoGrotesqueLightItalic, '../fonts/GalanoGrotesque-LightItalic', 'otf', 'opentype');
-@include font-face(GalanoGrotesqueMediumItalic, '../fonts/GalanoGrotesque-MediumItalic', 'otf', 'opentype');
-@include font-face(GalanoGrotesqueRegular, '../fonts/GalanoGrotesque-Regular', 'otf', 'opentype');
-@include font-face(GalanoGrotesqueSemiBold, '../fonts/GalanoGrotesque-SemiBold', 'otf', 'opentype');
+@include font-face(GalanoGrotesqueLight, '../fonts/GalanoGrotesque-Light', 'woff', 'woff');
+@include font-face(GalanoGrotesqueLightItalic, '../fonts/GalanoGrotesque-LightItalic', 'woff', 'woff');
+@include font-face(GalanoGrotesqueMediumItalic, '../fonts/GalanoGrotesque-MediumItalic', 'woff', 'woff');
+@include font-face(GalanoGrotesqueRegular, '../fonts/GalanoGrotesque-Regular', 'woff', 'woff');
+@include font-face(GalanoGrotesqueSemiBold, '../fonts/GalanoGrotesque-SemiBold', 'woff', 'woff');
 
 // B-App font
-@include font-face(GalanoGrotesqueMedium, '../fonts/GalanoGrotesque-Medium', 'otf', 'opentype');
-@include font-face(GalanoGrotesqueBold, '../fonts/GalanoGrotesque-Bold', 'otf', 'opentype');
+@include font-face(GalanoGrotesqueMedium, '../fonts/GalanoGrotesque-Medium', 'woff', 'woff');
+@include font-face(GalanoGrotesqueBold, '../fonts/GalanoGrotesque-Bold', 'woff', 'woff');
 
 $font-light: GalanoGrotesqueLight;
 $font-light-italic: GalanoGrotesqueLightItalic;
