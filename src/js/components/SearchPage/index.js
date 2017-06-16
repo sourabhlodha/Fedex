@@ -78,7 +78,7 @@ class SearchPage extends Component {
   }
 
   componentWillMount () {
-    localStorage.clear();
+    // localStorage.clear();
     this.props.dispatch(clearSearch());
     this.selectedCheckboxes = new Set();
   }

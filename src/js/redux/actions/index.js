@@ -1,5 +1,5 @@
 import { actionTypes as types, urls } from '../constants';
-import { post,get } from '../helpers';
+import { post, get, synthesize } from '../helpers';
 import request from 'superagent';
 import axios from 'axios';
 import _ from 'lodash';
@@ -188,3 +188,13 @@ export const LuisSearch = (url) => dispatch => {
 // https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
 
 // https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&$orderby=confidence desc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
+
+
+export const getTTS = (token, text) => dispatch => {
+  synthesize({
+    token,
+    text,
+    success: types.GET_TTS_DATA,
+    dispatch,
+  });
+};

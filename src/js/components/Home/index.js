@@ -12,7 +12,7 @@ import { Redirect } from 'react-router-dom';
 import Guid from 'guid';
 
 import { connect } from 'react-redux';
-import { clearAll,LuisSearch, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, getVision, ocrVision, handWrittenVision, BingSearch, customVision } from '../../redux/actions';
+import { clearAll, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, getVision, ocrVision, handWrittenVision, BingSearch, customVision } from '../../redux/actions';
 
 @connect((store) => {
   return {
@@ -77,9 +77,9 @@ class Home extends Component {
 
     this._callBingSearchApi = this._callBingSearchApi.bind(this);
     this._callCustomVisionApi = this._callCustomVisionApi.bind(this);
-    this._callLuisApi = this._callLuisApi.bind(this);
-    this._tick = this._tick.bind(this);
-    this._checkText = this._checkText.bind(this);
+    // this._callLuisApi = this._callLuisApi.bind(this);
+    // this._tick = this._tick.bind(this);
+    // this._checkText = this._checkText.bind(this);
 
     this.state = {
       files: [],
@@ -97,16 +97,16 @@ class Home extends Component {
       currurl:'',
       allcustom:'',
       disableCustomVisionButton: false,
-      secondsElapsed: 0,
-      getText: '',
-      count: 0,
-      gotoNextPage: false,
+      // secondsElapsed: 0,
+      // getText: '',
+      // count: 0,
+      // gotoNextPage: false,
     };
   }
 
 
   componentWillMount() {
-    localStorage.clear();
+    // localStorage.clear();
     this.props.dispatch(clearAll());
     this.setState({ imagesArray: initialImages });
   }
@@ -169,39 +169,39 @@ class Home extends Component {
     this.props.dispatch(goToDropZonePage());
   }
 
-  _callLuisApi(query){
-    let url='https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/d253b74b-9a8b-48f3-b575-2426974e58fc?subscription-key=b9ca6133dd894d7098d1e1e74e5af3a9&timezoneOffset=0&verbose=true&q='+query;
-    this.props.dispatch(LuisSearch(url));
-  }
+  // _callLuisApi(query){
+  //   let url='https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/d253b74b-9a8b-48f3-b575-2426974e58fc?subscription-key=b9ca6133dd894d7098d1e1e74e5af3a9&timezoneOffset=0&verbose=true&q='+query;
+  //   this.props.dispatch(LuisSearch(url));
+  // }
 
 
-  _tick() {
-    if(localStorage.getItem(1)) {
-      const storageValue = localStorage.getItem(1);
-      if(storageValue != this.state.getText) {
+  // _tick() {
+  //   if(localStorage.getItem(1)) {
+  //     const storageValue = localStorage.getItem(1);
+  //     if(storageValue != this.state.getText) {
 
-        this.setState({ getText: storageValue }, () => {
-          this._checkText();
-        });
-      }
-    }
-  }
+  //       this.setState({ getText: storageValue }, () => {
+  //         this._checkText();
+  //       });
+  //     }
+  //   }
+  // }
 
-  _checkText() {
-    const splittext = _.toLower(this.state.getText);
-    const indexOfText = splittext.indexOf('search');
-    if (indexOfText >= 0) {
-      this.setState({gotoNextPage: true});
-    }
+  // _checkText() {
+  //   const splittext = _.toLower(this.state.getText);
+  //   const indexOfText = splittext.indexOf('search');
+  //   if (indexOfText >= 0) {
+  //     this.setState({gotoNextPage: true});
+  //   }
 
-  }
+  // }
 
-  componentDidMount() {
-    this.interval = setInterval(this._tick, 1000);
-  } 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+  // componentDidMount() {
+  //   this.interval = setInterval(this._tick, 1000);
+  // } 
+  // componentWillUnmount() {
+  //   clearInterval(this.interval);
+  // }
 
   componentWillReceiveProps(nextProps) {
 
@@ -483,7 +483,6 @@ Home.propTypes = {
   LuisList:PropTypes.array,
   Luisfetching:PropTypes.bool,
   Luisfetched:PropTypes.bool,
-  history: PropTypes.func,
 
 };
 

@@ -7,44 +7,5 @@
   </head>
   <body>
     <react></react>
-     <div id="BotChatGoesHere"></div>
-
-      <script src="../bot.js"></script>
-     <script>
-            var params = BotChat.queryParams(location.search);
-
-            var user = {
-                id: 'LQaFr040s4w.cwA.az8.0oS0AB1d4ThwFfI_sKznhenTQVnq7UG5NhS8Qqsaugk',
-                name: 'fedexovergood'
-                };
-            
-            var bot = {
-                id: 'LQaFr040s4w.cwA.az8.0oS0AB1d4ThwFfI_sKznhenTQVnq7UG5NhS8Qqsaugk',
-                name: 'fedexovergood'
-            };
-            
-            window['botchatDebug'] = params['debug'] && params['debug'] === "true";
-
-           
-             var speechOptions = {
-                speechRecognizer: new BotChat.SpeechRecognition.CognitiveServicesSpeechRecognizer( { subscriptionKey: '8fd37122fdd74746b7b1d0b98708bb3f' } ),
-                 speechSynthesizer: new BotChat.SpeechSynthesis.BrowserSpeechSynthesizer()
-             }
-
-           
-            BotChat.App({
-                directLine: {
-                    secret: 'LQaFr040s4w.cwA._KA.gsueAJTsapxnUlIXkAtZhq2SPY3U3eWUOsK6kqKsbFQ',
-                    webSocket: params['webSocket'] && params['webSocket'] === "true" // defaults to true
-                },
-                user: user,
-                bot: bot,
-                locale: params['locale'],
-                resize: 'detect',
-                speechOptions: speechOptions,
-                // sendTyping: true,    // defaults to false. set to true to send 'typing' activities to bot (and other users) when user is typing
-            }, document.getElementById("BotChatGoesHere"));
-            
-        </script>
   </body>
 </html>
