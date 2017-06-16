@@ -191,6 +191,7 @@ class Home extends Component {
     const splittext = _.toLower(this.state.getText);
     const indexOfText = splittext.indexOf('search');
     if (indexOfText >= 0) {
+      /* */
       this.setState({gotoNextPage: true});
     }
 
@@ -248,10 +249,8 @@ class Home extends Component {
       }
 
       if(!_.isEmpty(nextProps.handList)) {
-        if (!_.isEmpty(nextProps.handList.recognitionResult)) {
-          _.map(nextProps.handList.recognitionResult.lines, line => {
-            allHandText.push(line.text);
-          });
+        if (!_.isEmpty(nextProps.handList.regions)) {
+          _.map(nextProps.handList.regions, lines => _.map(lines.lines, item => _.map(item.words, text => allHandText.push(text.text))));
         }
       }
 
