@@ -25,6 +25,12 @@ const commonConfig = merge([
     resolve: {
       extensions: ['.js', '.jsx', '.json'],
     },
+    node: {
+      fs: 'empty',
+      net: 'empty',
+      tls: 'empty',
+      dns: 'empty',
+    },
   },
   parts.webpackPromise(),
   parts.lintJavaScript({ include: PATHS.app }),
