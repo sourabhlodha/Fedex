@@ -7,6 +7,6 @@ import App from './js/App';
 
 export const Root = () => (
   <Provider store={store} key="provider">
-    <BrowserRouter history={ history }><App /></BrowserRouter>
+    <BrowserRouter><App /></BrowserRouter>
   </Provider>
 );

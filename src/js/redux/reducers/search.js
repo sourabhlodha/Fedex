@@ -27,7 +27,7 @@ const initialState = {
   handFetching: false,
   handFetched: false,
   hand: '',
-
+  uploadedImageUrl: '',
   callApi: false,
 
 };
@@ -63,8 +63,9 @@ const search = (state = initialState, action) => {
       handFetching: false,
       handFetched: false,
       hand: '',
-
+      uploadedImageUrl: '',
       callApi: false,
+      
     };
   case types.ON_SEARCH_REQUEST :
     return {...state, fetching: true, callApi: false, isvisionDetailPage: false, dropzoneImgUrl: '', visionList: {}, ocrList: {}, handList: {}};
@@ -96,6 +97,7 @@ const search = (state = initialState, action) => {
       dzFetched: true,
       
       dropzoneImgUrl: action.data.Message,
+      uploadedImageUrl: action.data.Message,
     };
   case types.DROPZONE_ERROR:
     return {...state, dzFetching: false, dzErr: action.data};

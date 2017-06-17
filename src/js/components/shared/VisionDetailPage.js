@@ -38,11 +38,11 @@ const VisionDetailPage = ({ ...props }) => {
   };
   let savebtn;
   if (props.onSave) {
-    const text = JSON.parse(props.cosmosDB.captions);
+    // const text = JSON.parse(props.cosmosDB.captions);
     savebtn = (<div className="modal-footer d-flex justify-content-between">
                 <div>
-                  <button className="btn btn-secondary"  onClick={()=>props.onBingSearch(text.text)} >BingSearch</button>
-                  <button className="btn btn-secondary" disabled={props.disableCustomVisionButton} onClick={()=>props.onCustomVisionSearch(props.cosmosDB.url)} >CustomVisionSearch</button>
+                  {props.bingSearch ? '' : <button className="btn btn-secondary"  onClick={()=>props.onBingSearch(props.cosmosDB.url)} >Web Search</button>}
+                  {props.bingSearch ? '' : <button className="btn btn-secondary" disabled={props.disableCustomVisionButton} onClick={()=>props.onCustomVisionSearch(props.cosmosDB.url)} >Fedex Prediction</button>}
                 </div>
                 <button className="btn btn-primary" onClick={props.onSave}>Save</button>
               </div>);
@@ -96,7 +96,7 @@ const VisionDetailPage = ({ ...props }) => {
       <div className="modal-dialog modal-lg">
         <div className="moda-content">
           <div className="modal-header">
-            <h5 className="modal-title">Image Description</h5>
+            <h5 className="modal-title"><b>Fedex OverGoods Item Description Summary</b></h5>
             <button type="button" className="close" onClick={props.onBack}>
               <span aria-hidden="true">&times;</span>
             </button>
@@ -108,7 +108,7 @@ const VisionDetailPage = ({ ...props }) => {
                   <div className="image" style={bgStyle}></div>
                 </div>
                 <div className="product-confidence">
-                  <div className="display-progress">
+                  <div className="display-progress padding">
                       <div className="title">Confidence:</div>
                       <div className="info">
                         <span className="perc">{confidence}%</span>
@@ -134,11 +134,11 @@ const VisionDetailPage = ({ ...props }) => {
                       <div className="info">{decTags}</div>
                     </li>
                     <li>
-                      <div className="title">Content</div>
+                      <div className="title">OCR Text:</div>
                       <div className="info">{contentText}</div>
                     </li>
                     <li>
-                      <div className="title">Hand Written Copy</div>
+                      <div className="title">Hand Written Text:</div>
                       <div className="info">{handwrittenText}</div>
                     </li>
                     {notes}
@@ -175,6 +175,7 @@ VisionDetailPage.propTypes = {
   onBingSearch:PropTypes.func,
   onCustomVisionSearch:PropTypes.func,
   disableCustomVisionButton: PropTypes.bool,
+  bingSearch: PropTypes.bool,
 };
 
 export default VisionDetailPage;

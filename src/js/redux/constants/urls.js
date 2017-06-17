@@ -11,3 +11,4 @@ export const VISIONAPI='https://westus.api.cognitive.microsoft.com/vision/v1.0/a
 
 export const OCRVISIONAPI='https://westus.api.cognitive.microsoft.com/vision/v1.0/ocr?language=unk&detectOrientation=false&Subscription-Key=8777479ad7414c46bbe3e78d7e399b41';
 export const HANDWRITTENVISIONAPI='https://westus.api.cognitive.microsoft.com/vision/v1.0/recognizeText?handwriting=false&Subscription-Key=8777479ad7414c46bbe3e78d7e399b41';
+export const BingSearchImageInsightAPi='https://api.cognitive.microsoft.com/bing/v7.0/images/details?imgUrl=https://asgtagur.blob.core.windows.net/ai-test/DesPath/DesPath5020011_2.jpg&modules=All&mkt=en-us&subscription-key=aa6e71cbaf9f49d2a12e7e03e09e698e';
