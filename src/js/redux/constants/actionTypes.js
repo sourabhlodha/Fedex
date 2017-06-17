@@ -58,3 +58,7 @@ export const CUSTOM_VISION_FAILURE='CUSTOM_VISION_FAILURE';
 export const LUIS_SEARCH_REQUEST='LUIS_SEARCH_REQUEST';
 export const LUIS_SEARCH_SUCCESS='LUIS_SEARCH_SUCCESS';
 export const LUIS_SEARCH_FAILURE='LUIS_SEARCH_FAILURE';
+
+export const SHOW_PageDisplay_Modal='SHOW_PageDisplay_Modal';
+export const SHOW_PageDisplay_DropPage='SHOW_PageDisplay_DropPage';
+export const SHOW_PageDisplay_BingPage='SHOW_PageDisplay_BingPage';

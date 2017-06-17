@@ -183,6 +183,18 @@ export const LuisSearch = (url) => dispatch => {
   });
 };
 
+export const PageDisplayModal = () => dispatch => {
+  dispatch({ type: types.SHOW_PageDisplay_Modal});
+};
+export const PageDisplayDropPage = () => dispatch => {
+  dispatch({ type: types.SHOW_PageDisplay_DropPage});
+};
+export const PageDisplayBingPage = () => dispatch => {
+  dispatch({ type: types.SHOW_PageDisplay_BingPage});
+};
+export const PageDisplayBingPageandModal = () => dispatch => {
+  dispatch({ type: types.SHOW_PageDisplay_BingPageAndModal});
+};
 // https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&highlight=captions&suggesterName=sg&fuzzy=false&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
 
 // https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4

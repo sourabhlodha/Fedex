@@ -63,6 +63,10 @@ const search = (state = initialState, action) => {
       handFetching: false,
       handFetched: false,
       hand: '',
+      BingSearchList: '',
+      BingSearchFetching: false,
+      BingSearchFetched: false,
+      BingErr: '',
 
       callApi: false,
     };

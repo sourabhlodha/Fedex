@@ -55,15 +55,7 @@ const dropzone = (state = initialState, action) => {
       visionErr: '',
 
       
-      ocrList: {},
-      ocrFetching: false,
-      ocrFetched: false,
-      ocrErr: '',
-      
-      handList: {},
-      handFetching: false,
-      handFetched: false,
-      hand: '',
+  
 
       cosmosFetching: false,
 
@@ -76,6 +68,10 @@ const dropzone = (state = initialState, action) => {
       BingSearchFetching: false,
       BingSearchFetched: false,
       BingErr: '',
+
+      Modal:false,
+      BingPage:false,
+      DropPage:false,
     };
 
   case types.DROPZONE_REQUEST :
@@ -143,6 +139,7 @@ const dropzone = (state = initialState, action) => {
   case types.SHOW_DROPZONE_PAGE:
     return {...state, visionFetched: false, visionFetching: false };
   
+ 
 
   case types.SAVE_COSMOS_DB_REQUEST:
     return {...state, cosmosFetching: true };
@@ -175,9 +172,47 @@ const dropzone = (state = initialState, action) => {
       BingSearchFetching: false,
       BingSearchFetched: true,
       BingSearchList: action.data,
+
+      dropzoneImgUrl: '',
+      fetching: false,
+      fetched: false,
+      err: '',
+
+      visionList: '',
+      visionFetching: false,
+      visionFetched: false,
+      visionErr: '',
+
+      
+      ocrList: {},
+      ocrFetching: false,
+      ocrFetched: false,
+      ocrErr: '',
+      
+      handList: {},
+      handFetching: false,
+      handFetched: false,
+      hand: '',
+
+      cosmosFetching: false,
+
+      CustomVisionList: '',
+      CustomFetching: false,
+      CustomFetched: false,
+      CustomErr: '',
     };  
   case types.BING_SEARCH_FAILURE:
     return {...state, BingSearchFetching: false, handErr: action.data};
+
+  case types.SHOW_PageDisplay_Modal:
+    return {...state,  Modal: true, BingPage: false, DropPage:false };
+  case types.SHOW_PageDisplay_DropPage:
+    return {...state, Modal:false, BingPage:false, DropPage:true};
+  case types.SHOW_PageDisplay_BingPage:
+    return {...state,Modal:false,BingPage:true,DropPage:false};
+  case types.SHOW_PageDisplay_BingPageAndModal:
+    return {...state,Modal:true,BingPage:true,DropPage:false};
+
 
   default:
     return state;

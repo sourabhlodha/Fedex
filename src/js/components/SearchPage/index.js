@@ -9,6 +9,10 @@ import VisionDetailPage from '../shared/VisionDetailPage';
 import SearchDropZone from './SearchDropZone';
 import BingSearchResult from './BingSearchResult';
 
+
+
+
+
 import axios from 'axios';
 
 import {onSearch, uploadAzure, clearSearch, showVisionPage, hideVisionPage, getVision, ocrVision, handWrittenVision} from '../../redux/actions';
@@ -64,6 +68,7 @@ class SearchPage extends Component {
     this._callApi = this._callApi.bind(this);
     this._callOcrApi = this._callOcrApi.bind(this);
     this._callHandWrittenApi = this._callHandWrittenApi.bind(this);
+    this._onBackHomePage=this._onBackHomePage.bind(this);
 
 
     this.state = {
@@ -179,6 +184,10 @@ class SearchPage extends Component {
     this.props.dispatch(handWrittenVision(imageBody));
   }
 
+  _onBackHomePage(url){
+    console.log(url);
+    // this.context.router.history.push('/Home');
+  }
   componentWillReceiveProps(nextProps) {
     
     if (nextProps.dropzoneImgUrl) {
@@ -277,8 +286,9 @@ class SearchPage extends Component {
         toggleDescTags={this._toggleDescTags}
         toggleItemTags={this._toggleItemTags}
       />;
-    } else if (!_.isEmpty(BingSearchList)) {
-      searchResultPage = <BingSearchResult searchResults={BingSearchList.value} />;
+    } else if (!_.isEmpty(BingSearchList.visuallySimilarImages)) {
+      console.log(BingSearchList);
+      searchResultPage = <BingSearchResult searchResults={BingSearchList.visuallySimilarImages.value} onBackHomePage={this._onBackHomePage} />;
     }
 
     let loading;
@@ -362,7 +372,7 @@ SearchPage.propTypes = {
   visionList: PropTypes.object,
   ocrList: PropTypes.object,
   handList: PropTypes.object,
-  BingSearchList: PropTypes.object,
+  BingSearchList: PropTypes.array,
 };  
 
 
