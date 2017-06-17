@@ -191,10 +191,26 @@ export const LuisSearch = (url) => dispatch => {
 
 
 export const getTTS = (token, text) => dispatch => {
+  dispatch({ type: types.TTS_AUDIO_TEXT, text});
   synthesize({
     token,
     text,
     success: types.GET_TTS_DATA,
     dispatch,
   });
+};
+
+export const callBotApi = (url) => dispatch => {
+  dispatch({ type: types.BOT_REQUEST });
+  get({
+    url: url,
+    success: types.BOT_SUCCESS,
+    failure: types.BOT_FAILURE,
+    dispatch,
+  });
+};
+
+
+export const stopbot = () => dispatch => {
+  dispatch({type: types.STOP_BOT});
 };

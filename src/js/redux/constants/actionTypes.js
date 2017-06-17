@@ -60,3 +60,9 @@ export const LUIS_SEARCH_SUCCESS='LUIS_SEARCH_SUCCESS';
 export const LUIS_SEARCH_FAILURE='LUIS_SEARCH_FAILURE';
 
 export const GET_TTS_DATA = 'GET_TTS_DATA';
+export const TTS_AUDIO_TEXT = 'TTS_AUDIO_TEXT';
+
+export const BOT_REQUEST = 'BOT_REQUEST';
+export const BOT_SUCCESS = 'BOT_SUCCESS';
+export const BOT_FAILURE = 'BOT_FAILURE';
+export const STOP_BOT = 'STOP_BOT';

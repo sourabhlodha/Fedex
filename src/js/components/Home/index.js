@@ -12,7 +12,7 @@ import { Redirect } from 'react-router-dom';
 import Guid from 'guid';
 
 import { connect } from 'react-redux';
-import { clearAll, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, getVision, ocrVision, handWrittenVision, BingSearch, customVision } from '../../redux/actions';
+import { clearAll, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, getVision, ocrVision, handWrittenVision, BingSearch, customVision, stopbot } from '../../redux/actions';
 
 @connect((store) => {
   return {
@@ -51,6 +51,8 @@ import { clearAll, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, g
     LuisList:store.luissearch.LuisList,
     Luisfetching:store.luissearch.LuisList,
     Luisfetched:store.luissearch.LuisList,
+
+    intent: store.audio.intent,
 
   };
 })
@@ -100,7 +102,7 @@ class Home extends Component {
       // secondsElapsed: 0,
       // getText: '',
       // count: 0,
-      // gotoNextPage: false,
+      gotoSearchPage: false,
     };
   }
 
@@ -108,7 +110,7 @@ class Home extends Component {
   componentWillMount() {
     // localStorage.clear();
     this.props.dispatch(clearAll());
-    this.setState({ imagesArray: initialImages });
+    this.setState({ imagesArray: initialImages, gotoSearchPage: false });
   }
 
   _onDrop(files) {
@@ -169,40 +171,6 @@ class Home extends Component {
     this.props.dispatch(goToDropZonePage());
   }
 
-  // _callLuisApi(query){
-  //   let url='https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/d253b74b-9a8b-48f3-b575-2426974e58fc?subscription-key=b9ca6133dd894d7098d1e1e74e5af3a9&timezoneOffset=0&verbose=true&q='+query;
-  //   this.props.dispatch(LuisSearch(url));
-  // }
-
-
-  // _tick() {
-  //   if(localStorage.getItem(1)) {
-  //     const storageValue = localStorage.getItem(1);
-  //     if(storageValue != this.state.getText) {
-
-  //       this.setState({ getText: storageValue }, () => {
-  //         this._checkText();
-  //       });
-  //     }
-  //   }
-  // }
-
-  // _checkText() {
-  //   const splittext = _.toLower(this.state.getText);
-  //   const indexOfText = splittext.indexOf('search');
-  //   if (indexOfText >= 0) {
-  //     this.setState({gotoNextPage: true});
-  //   }
-
-  // }
-
-  // componentDidMount() {
-  //   this.interval = setInterval(this._tick, 1000);
-  // } 
-  // componentWillUnmount() {
-  //   clearInterval(this.interval);
-  // }
-
   componentWillReceiveProps(nextProps) {
 
     if(nextProps.CustomFetched && !nextProps.CustomFetching) {
@@ -233,7 +201,7 @@ class Home extends Component {
       });
     }
 
-    if (  _.isEmpty(nextProps.CustomVisionList) && nextProps.visionFetched && nextProps.ocrFetched || _.isEmpty(nextProps.CustomVisionList) && nextProps.visionFetched && nextProps.handFetched ) {
+    if (_.isEmpty(nextProps.CustomVisionList) && nextProps.visionFetched && nextProps.ocrFetched || _.isEmpty(nextProps.CustomVisionList) && nextProps.visionFetched && nextProps.handFetched ) {
       const allOrcText = [];
       const allHandText = [];
 
@@ -304,6 +272,22 @@ class Home extends Component {
 
     }
 
+    if (!_.isEmpty(nextProps.intent)) {
+      if (!_.isEmpty(nextProps.intent.entities)) {
+        if (nextProps.intent.entities[0].type === 'showqueuedovergooditems') {
+          console.log(nextProps);
+          this._callApi('https://asgtagur.blob.core.windows.net/ai-test/DesPath/0131736369-63169.jpg');
+          this._stopBOT();
+        } else if (nextProps.intent.entities[0].type === 'showsearchpage') {
+          this.setState({ gotoSearchPage: true });
+        }
+      }
+    }
+
+  }
+
+  _stopBOT() {
+    this.props.dispatch(stopbot());
   }
 
   _onSave() {
@@ -344,16 +328,16 @@ class Home extends Component {
 
   render() {
 
-    const {BingSearchList, fetching, visionFetching, visionFetched } = this.props;
+    const {fetching, visionFetching, visionFetched } = this.props;
     
-    if(!_.isEmpty(BingSearchList.value) || this.state.gotoNextPage) {
+    if(this.state.gotoSearchPage) {
       return <Redirect to="/search-assets" />;
     }
 
     let images;
 
     if (!_.isEmpty(this.state.imagesArray)) {
-      images = _.map(_.reverse(this.state.imagesArray), (f, i) => {
+      images = _.map(this.state.imagesArray, (f, i) => {
         const status = <div className="status"><button className="btn btn-primary" type="button" onClick={() => this._callApi(f.imgurl)}>View</button></div>;
         const style = { 'backgroundImage': `url(${f.imgurl})`};
 
@@ -483,6 +467,7 @@ Home.propTypes = {
   LuisList:PropTypes.array,
   Luisfetching:PropTypes.bool,
   Luisfetched:PropTypes.bool,
+  intent: PropTypes.array,
 
 };
 

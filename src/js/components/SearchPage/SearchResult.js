@@ -31,7 +31,7 @@ const SearchResult = ({ ...props }) => {
 
   const searchList = _.map(productResults, (product, i) => {
     const productImage = {
-      'backgroundImage': product.product.url,
+      'backgroundImage': `url(${product.product.url})`,
     };
 
     const result = _.values(product.product);
@@ -45,12 +45,11 @@ const SearchResult = ({ ...props }) => {
     };
 
     return (
-      <div className="col-sm-6 d-flex" key={i}>
+      <div className="col-sm-3 d-flex" key={i}>
         <div className="product-list">
           <div className="product-list-box">
             <div className="product-image">
               <div className="full-image"  style={productImage}></div>
-              <img src={product.product.url}  />
             </div>
             <div className="product-desc">
               <div className="confidence display-progress">
