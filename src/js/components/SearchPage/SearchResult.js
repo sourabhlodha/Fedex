@@ -14,6 +14,7 @@ import _ from 'lodash';
 //   </div>
 
 const SearchResult = ({ ...props }) => {
+  // console.log(props);
   const results = [];
   
   _.map(props.searchResults, product => {
@@ -45,7 +46,7 @@ const SearchResult = ({ ...props }) => {
     };
 
     return (
-      <div className="col-sm-3 d-flex" key={i}>
+      <div className="card" key={i}>
         <div className="product-list">
           <div className="product-list-box">
             <div className="product-image">
@@ -80,10 +81,31 @@ const SearchResult = ({ ...props }) => {
       </div>
     );
   });
+
+  let uploadImageBox;
+  if (props.dropzoneImgUrl) {
+    uploadImageBox = (<div className="card dz-uploadimage">
+          <div className="product-list">
+            <div className="product-list-box">
+              <div className="product-desc">
+                Your are search for :
+              </div>
+              <div className="product-image">
+                <div className="full-image"  style={uploadImage}></div>
+              </div>
+            </div>
+          </div>
+        </div>);
+  }
+
+  const uploadImage = {
+    'backgroundImage': `url(${props.dropzoneImgUrl})`,
+  };
   
   return (
     <div className="container-fluid search-result-page">
-      <div className="row">
+      <div className="card-columns">
+        {uploadImageBox}
         {searchList}
       </div>
     </div>
@@ -97,6 +119,7 @@ SearchResult.propTypes = {
   tags: PropTypes.array,
   toggleDescTags: PropTypes.func,
   toggleItemTags: PropTypes.func,
+  dropzoneImgUrl: PropTypes.string,
 };
 
 export default SearchResult;

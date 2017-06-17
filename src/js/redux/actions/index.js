@@ -214,3 +214,16 @@ export const callBotApi = (url) => dispatch => {
 export const stopbot = () => dispatch => {
   dispatch({type: types.STOP_BOT});
 };
+
+export const PageDisplayModal = () => dispatch => {
+  dispatch({ type: types.SHOW_PageDisplay_Modal});
+};
+export const PageDisplayDropPage = () => dispatch => {
+  dispatch({ type: types.SHOW_PageDisplay_DropPage});
+};
+export const PageDisplayBingPage = () => dispatch => {
+  dispatch({ type: types.SHOW_PageDisplay_BingPage});
+};
+export const PageDisplayBingPageandModal = () => dispatch => {
+  dispatch({ type: types.SHOW_PageDisplay_BingPageAndModal});
+};

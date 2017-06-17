@@ -66,3 +66,7 @@ export const BOT_REQUEST = 'BOT_REQUEST';
 export const BOT_SUCCESS = 'BOT_SUCCESS';
 export const BOT_FAILURE = 'BOT_FAILURE';
 export const STOP_BOT = 'STOP_BOT';
+
+export const SHOW_PageDisplay_Modal='SHOW_PageDisplay_Modal';
+export const SHOW_PageDisplay_DropPage='SHOW_PageDisplay_DropPage';
+export const SHOW_PageDisplay_BingPage='SHOW_PageDisplay_BingPage';

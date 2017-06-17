@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { getTTS, callBotApi } from '../../redux/actions';
 
 @connect((store) => {
-  console.log(store);
+  // console.log(store);
   return {
     audio: store.audio.audio,
     audiotext: store.audio.audiotext, 
@@ -115,7 +115,7 @@ class VoiceRecognitionDemo extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
+    // console.log(nextProps);
     if(nextProps.audio) {
       this.playAudio(nextProps.audio, nextProps.audiotext);
     }

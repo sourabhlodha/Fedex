@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import BarchartImage from '../../../assets/images/barchart.jpg';
-import topuploadspeeds from '../../../assets/images/topuploadspeeds.png';
-
-import DropZonePage from './DropZonePage';
 import VisionDetailPage from '../shared/VisionDetailPage';
+import HomePage from './HomePage';
+import BingSearchPage from '../BingSearch';
+
 import { Redirect } from 'react-router-dom';
 
 import Guid from 'guid';
@@ -54,6 +53,10 @@ import { clearAll, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, g
 
     intent: store.audio.intent,
 
+    Modal:store.dropzone.Modal,
+    BingPage:store.dropzone.BingPage,
+    DropPage:store.dropzone.DropPage,
+
   };
 })
 
@@ -79,9 +82,11 @@ class Home extends Component {
 
     this._callBingSearchApi = this._callBingSearchApi.bind(this);
     this._callCustomVisionApi = this._callCustomVisionApi.bind(this);
-    // this._callLuisApi = this._callLuisApi.bind(this);
-    // this._tick = this._tick.bind(this);
-    // this._checkText = this._checkText.bind(this);
+    this._callApiFromBing=this._callApiFromBing.bind(this);
+    this._onPreviousUrl=this._onPreviousUrl.bind(this);
+    this._previosHandwrittenTags=this._previosHandwrittenTags.bind(this);
+    this._previosOcrTags=this._previosOcrTags.bind(this);
+    this._backtoHome=this._backtoHome.bind(this);
 
     this.state = {
       files: [],
@@ -99,19 +104,31 @@ class Home extends Component {
       currurl:'',
       allcustom:'',
       disableCustomVisionButton: false,
-      // secondsElapsed: 0,
-      // getText: '',
-      // count: 0,
       gotoSearchPage: false,
+      Modal:false,
+      Drop:false,
+      BingSearch:false,
+      arrayImage:'',
+      previosurl:'',
+      previosHandwrittenTags:'',
+      previosOcrTags:'',
+
     };
   }
 
 
   componentWillMount() {
     // localStorage.clear();
-    this.props.dispatch(clearAll());
+    this._backtoHome();
     this.setState({ imagesArray: initialImages, gotoSearchPage: false });
   }
+
+  _backtoHome() {
+    this.setState({ gotoNextPage: false }, () => {
+      this.props.dispatch(clearAll());
+    });
+  }
+
 
   _onDrop(files) {
     this.setState({ files, index: 0 }, () => {
@@ -145,6 +162,29 @@ class Home extends Component {
   }
   _onNotesChange(e){
     this.setState({ notes: e.target.value });
+  }
+  
+  _onPreviousUrl(e){
+    this.setState({ previosurl: e });
+  }
+
+  _previosHandwrittenTags(e){
+    this.setState({ previosHandwrittenTags: e });
+
+  }
+
+  _previosOcrTags(e){
+    this.setState({previosOcrTags:e});
+  }
+
+
+  _callApiFromBing(cosmos,url){
+   
+    this._onPreviousUrl(cosmos.url);
+    this._previosHandwrittenTags(cosmos.handwrittentags);
+    this._previosOcrTags(cosmos.ocrtags);
+    this.setState({gotoNextPage:true});
+    this._callApi(url);
   }
 
   _callApi(url) {  
@@ -216,10 +256,13 @@ class Home extends Component {
       }
 
       if(!_.isEmpty(nextProps.handList)) {
-        if (!_.isEmpty(nextProps.handList.recognitionResult)) {
-          _.map(nextProps.handList.recognitionResult.lines, line => {
-            allHandText.push(line.text);
-          });
+        // if (!_.isEmpty(nextProps.handList.recognitionResult)) {
+        //   _.map(nextProps.handList.recognitionResult.lines, line => {
+        //     allHandText.push(line.text);
+        //   });
+        // }
+        if (!_.isEmpty(nextProps.handList.regions)) {
+          _.map(nextProps.handList.regions, lines => _.map(lines.lines, item => _.map(item.words, text => allHandText.push(text.text))));
         }
       }
 
@@ -268,8 +311,24 @@ class Home extends Component {
         allcaption = data.text;
       });
 
-      this.setState({ cosmosDB, tags: allTags,descriptiontags:alldescriptiontags,captionvalue:allcaption,ocrvalue:orctags,handwrittenvalues:handwrittentags});
-
+      if(this.state.gotoNextPage){
+        let pre=this.state.previosurl;
+        if(!_.isEmpty(this.state.previosurl)){
+          cosmosDB.url=pre;
+        }
+        let hand=this.state.previosHandwrittenTags;
+        if(!_.isEmpty(this.state.previosHandwrittenTags)){
+          cosmosDB.handwrittentags=hand;
+        }
+        let ocr=this.state.previosOcrTags;
+        if(!_.isEmpty(this.state.previosOcrTags)){
+          cosmosDB.ocrtags=ocr;
+        }
+        this.setState({ cosmosDB, tags: allTags,descriptiontags:alldescriptiontags,captionvalue:allcaption});
+      }
+      else{
+        this.setState({ cosmosDB, tags: allTags,descriptiontags:alldescriptiontags,captionvalue:allcaption,ocrvalue:orctags,handwrittenvalues:handwrittentags});
+      }
     }
 
     if (!_.isEmpty(nextProps.intent)) {
@@ -317,18 +376,18 @@ class Home extends Component {
   }
 
   _callBingSearchApi(query){
-    let url = 'https://api.cognitive.microsoft.com/bing/v7.0/images/search?q='+query+'&modules=SimilarProducts&en-us&subscription-key=aa6e71cbaf9f49d2a12e7e03e09e698e';
+    const url='https://api.cognitive.microsoft.com/bing/v7.0/images/details?imgUrl='+query+'&modules=All&mkt=en-us&subscription-key=aa6e71cbaf9f49d2a12e7e03e09e698e';
     this.props.dispatch(BingSearch(url));
   } 
 
   _callCustomVisionApi(query){
-    let url = 'http://fedexovergoodservices.azurewebsites.net/api/Prediction?imageURL='+query;
+    const url = 'http://fedexovergoodservices.azurewebsites.net/api/Prediction?imageURL='+query;
     this.props.dispatch(customVision(url));
   }
 
   render() {
 
-    const {fetching, visionFetching, visionFetched } = this.props;
+    const {BingSearchList, fetching, visionFetching, visionFetched } = this.props;
     
     if(this.state.gotoSearchPage) {
       return <Redirect to="/search-assets" />;
@@ -345,7 +404,7 @@ class Home extends Component {
       });
     }
     
-    let pageData;
+    let imageDetailModal;
     let visionFetchingProgress;
     if (visionFetching) {
       visionFetchingProgress = (<div className="vision-progress"><div className="status spinner">
@@ -356,7 +415,7 @@ class Home extends Component {
     }
 
     if (visionFetched && this.state.cosmosDB) {
-      pageData = (
+      imageDetailModal = (
           <VisionDetailPage 
             visionFetching={visionFetching}
             cosmosDB={this.state.cosmosDB}
@@ -377,46 +436,24 @@ class Home extends Component {
             disableCustomVisionButton={this.state.disableCustomVisionButton}
             onBingSearch={this._callBingSearchApi}
             onCustomVisionSearch={this._callCustomVisionApi}
+            bingSearch={this.state.gotoNextPage}
           />
       );
     }
 
+    let pageData = (
+      <HomePage fetching={fetching} images={images} onDrop={this._onDrop}/>
+    );
+
+    if(!_.isEmpty(BingSearchList.visuallySimilarImages) || this.state.gotoNextPage) {
+      // console.log(BingSearchList);
+      pageData = <BingSearchPage bingSearchList={BingSearchList} callApiFromBing={this._callApiFromBing} cosmosDB={this.state.cosmosDB}  backtoHome={this._backtoHome} />;
+    }
+
     return (
-      <div className="container-fluid landingPage">
-        <div className="row">
-          <div className="col-sm-7">
-            <div className="card top-card">
-              <h4>Report</h4>
-              <div className="card-body">
-              <div className="total">
-                Total uploads: <span>23023</span>
-              </div>
-              <div className="graph">
-                <img src={BarchartImage} width="250" />
-              </div>
-              <div className="info">
-                <ul>
-                  <li> <span className="green-dot"></span> Visitors </li>
-                  <li> <span className="green-dot"></span> Visitors </li>
-                </ul>
-              </div>
-              <div className="uploads">
-                <ul>
-                  <li> 12314123</li>
-                  <li> 23434 </li>
-                </ul>
-              </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-5">
-            <div className="card top-card">
-              <img src={topuploadspeeds} />
-            </div>
-          </div>
-        </div>
-        <DropZonePage fetching={fetching} images={images} onDrop={this._onDrop}/>
+      <div>
         {pageData}
+        {imageDetailModal}
         {visionFetchingProgress}
       </div>
     );
@@ -461,9 +498,11 @@ Home.propTypes = {
   CustomVisionList:PropTypes.array,
   CustomFetching:PropTypes.bool,
   CustomFetched:PropTypes.bool,
-  BingSearchList:PropTypes.array,
+  BingSearchList:PropTypes.object,
   BingSearchFetching:PropTypes.bool,
   BingSearchFetched:PropTypes.bool,
+  arrayImage:PropTypes.array,
+  previosurl:PropTypes.string,
   LuisList:PropTypes.array,
   Luisfetching:PropTypes.bool,
   Luisfetched:PropTypes.bool,

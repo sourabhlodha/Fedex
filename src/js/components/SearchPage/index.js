@@ -7,11 +7,10 @@ import _ from 'lodash';
 import SearchResult from './SearchResult';
 import VisionDetailPage from '../shared/VisionDetailPage';
 import SearchDropZone from './SearchDropZone';
-import BingSearchResult from './BingSearchResult';
 
 import axios from 'axios';
 
-import {onSearch, uploadAzure, clearSearch, showVisionPage, hideVisionPage, getVision, ocrVision, handWrittenVision} from '../../redux/actions';
+import {onSearch, uploadAzure, clearSearch, showVisionPage, hideVisionPage, getVision, ocrVision, handWrittenVision, stopbot} from '../../redux/actions';
 
 @connect((store) => {
   return {
@@ -38,9 +37,10 @@ import {onSearch, uploadAzure, clearSearch, showVisionPage, hideVisionPage, getV
     handFetched: store.search.handFetched,
 
     callApi: store.search.callApi,
-
-    BingSearchList: store.dropzone.BingSearchList,
-
+    uploadedImageUrl: store.search.uploadedImageUrl,
+   
+    intent: store.audio.intent,
+    
   };
 })
 
@@ -256,10 +256,28 @@ class SearchPage extends Component {
         }
       });
     }
+
+    if (!_.isEmpty(nextProps.intent)) {
+      if (!_.isEmpty(nextProps.intent.entities)) {
+        if (nextProps.intent.entities[0].type === 'SearchItem') {
+          console.log(nextProps);
+          // this._callApi('https://asgtagur.blob.core.windows.net/ai-test/DesPath/0131736369-63169.jpg');
+          this.setState({ searchValue: nextProps.intent.entities[0].entity }, () => {
+            this._callSearchService();
+          });
+          this._stopBOT();
+        }
+      }
+    }
+
+  }
+
+  _stopBOT() {
+    this.props.dispatch(stopbot());
   }
 
   render() {
-    const { searchResult, BingSearchList, isvisionDetailPage, fetching, fetched, cosmosDB } = this.props;
+    const { searchResult, uploadedImageUrl, isvisionDetailPage, fetching, fetched, cosmosDB } = this.props;
     let searchResultPage;
     let noresult;
     if (fetched) {
@@ -276,9 +294,8 @@ class SearchPage extends Component {
         tags={tags}
         toggleDescTags={this._toggleDescTags}
         toggleItemTags={this._toggleItemTags}
+        dropzoneImgUrl={uploadedImageUrl}
       />;
-    } else if (!_.isEmpty(BingSearchList)) {
-      searchResultPage = <BingSearchResult searchResults={BingSearchList.value} />;
     }
 
     let loading;
@@ -359,10 +376,11 @@ SearchPage.propTypes = {
   isvisionDetailPage: PropTypes.bool,
   cosmosDB: PropTypes.object,
   dropzoneImgUrl: PropTypes.object,
+  uploadedImageUrl: PropTypes.object,
   visionList: PropTypes.object,
   ocrList: PropTypes.object,
   handList: PropTypes.object,
-  BingSearchList: PropTypes.object,
+  intent: PropTypes.array,
 };  
 
 

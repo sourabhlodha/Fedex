@@ -897,11 +897,6 @@ button.card{
   }
 }
 .product-list {
-  margin-bottom: 10px;
-  border: 1px solid #cacaca;
-  border-radius: 4px;
-  width: 100%;
-  background-color: #fff; 
   .product-list-box {
     align-items: center;
   }
@@ -1032,5 +1027,62 @@ button.card{
   .card {
     margin-bottom: 20px;
     border-color: $blue;
+  }
+  img {
+    display: block;
+    margin: 0 auto;
+  }
+  .card-columns{
+    column-count: 4;
+    column-width: 100px;
+  }
+  .card-block {
+    .btn {
+      font-size: .8em;
+    }
+  }
+}
+
+.padding {
+  padding-top: 5px;
+}
+
+.page-bingSearch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  .btn-close {
+    position: absolute;
+    background: transparent;
+    color: white;
+    top: 10px;
+    right: 28px;
+    font-size: 28px;
+  }
+  .search {
+    padding: 70px 40px 20px;
+  }
+  .fedex-inverse{
+    height: 60px;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300px;
+    > svg{
+      position: absolute;
+      top: -61px;
+      left: -81px;
+      height: 210px;
+    }
+  }
+}
+
+
+.dz-uploadimage{
+  .product-list {
+    background: #6c0298;
+    color: white;
+    font-size: 28px;
   }
 }
