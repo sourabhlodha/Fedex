@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import moment from 'moment';
 
-
-
 const BingSearchResult = ({ ...props }) => {
   console.log(props);
   const searchList = _.map(props.searchResults, (item, i) => {
@@ -14,7 +12,6 @@ const BingSearchResult = ({ ...props }) => {
         <div className="card-block">
           <h4 className="card-title">{item.name}</h4>
           <a href={item.webSearchUrl} className="btn btn-primary">View Details</a>
-          <button className="btn btn-primary" onClick={()=>props.onBackHomePage(item.contentUrl)}>Back To Home  </button>
         </div>
         <div className="card-footer">
           <small className="text-muted">Last updated {moment(item.datePublished).format('MM/DD/YYYY')}</small>

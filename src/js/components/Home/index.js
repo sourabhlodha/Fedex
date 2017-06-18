@@ -2,20 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-// import BarchartImage from '../../../assets/images/barchart.jpg';
-// import topuploadspeeds from '../../../assets/images/topuploadspeeds.png';
-
-// import DropZonePage from './DropZonePage';
 import VisionDetailPage from '../shared/VisionDetailPage';
-// import { Redirect } from 'react-router-dom';
+import HomePage from './HomePage';
+import BingSearchPage from '../BingSearch';
+
+import { Redirect } from 'react-router-dom';
 
 import Guid from 'guid';
 
 import { connect } from 'react-redux';
-import { clearAll,LuisSearch, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, getVision, ocrVision, handWrittenVision, BingSearch, customVision } from '../../redux/actions';
-import PageDisplay from './PageDisplay';
-import BingSearchPage from '../BingSearch';
-
+import { clearAll, saveToCosmosDB, getImageUrl, goToDropZonePage, uploadAzure, getVision, ocrVision, handWrittenVision, BingSearch, customVision, stopbot } from '../../redux/actions';
 
 @connect((store) => {
   return {
@@ -55,10 +51,12 @@ import BingSearchPage from '../BingSearch';
     Luisfetching:store.luissearch.LuisList,
     Luisfetched:store.luissearch.LuisList,
 
+    intent: store.audio.intent,
+
     Modal:store.dropzone.Modal,
     BingPage:store.dropzone.BingPage,
     DropPage:store.dropzone.DropPage,
-    
+
   };
 })
 
@@ -70,7 +68,6 @@ class Home extends Component {
     this._onDrop = this._onDrop.bind(this);
     this._uploadToAWS = this._uploadToAWS.bind(this);
     this._callApi = this._callApi.bind(this);
-    this._callApiFromBing=this._callApiFromBing.bind(this);
     this._backToDropZone = this._backToDropZone.bind(this);
     this._callOcrApi = this._callOcrApi.bind(this);
     this._callHandWrittenApi = this._callHandWrittenApi.bind(this);
@@ -82,15 +79,15 @@ class Home extends Component {
     this._onNotesChange = this._onNotesChange.bind(this);
     this._onTagsChange = this._onTagsChange.bind(this);
     this._onDescriptionTagsChange = this._onDescriptionTagsChange.bind(this);
-    this._onPreviousUrl=this._onPreviousUrl.bind(this);
+
     this._callBingSearchApi = this._callBingSearchApi.bind(this);
     this._callCustomVisionApi = this._callCustomVisionApi.bind(this);
-    this._callLuisApi = this._callLuisApi.bind(this);
-    this._tick = this._tick.bind(this);
-    this._checkText = this._checkText.bind(this);
+    this._callApiFromBing=this._callApiFromBing.bind(this);
+    this._onPreviousUrl=this._onPreviousUrl.bind(this);
     this._previosHandwrittenTags=this._previosHandwrittenTags.bind(this);
     this._previosOcrTags=this._previosOcrTags.bind(this);
     this._backtoHome=this._backtoHome.bind(this);
+
     this.state = {
       files: [],
       index: 0,
@@ -107,10 +104,7 @@ class Home extends Component {
       currurl:'',
       allcustom:'',
       disableCustomVisionButton: false,
-      secondsElapsed: 0,
-      getText: '',
-      count: 0,
-      gotoNextPage: false,
+      gotoSearchPage: false,
       Modal:false,
       Drop:false,
       BingSearch:false,
@@ -118,25 +112,27 @@ class Home extends Component {
       previosurl:'',
       previosHandwrittenTags:'',
       previosOcrTags:'',
+
     };
   }
 
 
   componentWillMount() {
-    localStorage.clear();
+    // localStorage.clear();
     this._backtoHome();
-    this.setState({ imagesArray: initialImages });
-  }
-
-  _onDrop(files) {
-    this.setState({ files, index: 0 }, () => {
-      this._uploadToAWS(files);
-    });
+    this.setState({ imagesArray: initialImages, gotoSearchPage: false });
   }
 
   _backtoHome() {
     this.setState({ gotoNextPage: false }, () => {
       this.props.dispatch(clearAll());
+    });
+  }
+
+
+  _onDrop(files) {
+    this.setState({ files, index: 0 }, () => {
+      this._uploadToAWS(files);
     });
   }
 
@@ -167,7 +163,7 @@ class Home extends Component {
   _onNotesChange(e){
     this.setState({ notes: e.target.value });
   }
-
+  
   _onPreviousUrl(e){
     this.setState({ previosurl: e });
   }
@@ -215,45 +211,10 @@ class Home extends Component {
     this.props.dispatch(goToDropZonePage());
   }
 
-  _callLuisApi(query){
-    let url='https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/d253b74b-9a8b-48f3-b575-2426974e58fc?subscription-key=b9ca6133dd894d7098d1e1e74e5af3a9&timezoneOffset=0&verbose=true&q='+query;
-    this.props.dispatch(LuisSearch(url));
-  }
-
-
-  _tick() {
-    if(localStorage.getItem(1)) {
-      const storageValue = localStorage.getItem(1);
-      if(storageValue != this.state.getText) {
-
-        this.setState({ getText: storageValue }, () => {
-          this._checkText();
-        });
-      }
-    }
-  }
-
-  _checkText() {
-    const splittext = _.toLower(this.state.getText);
-    const indexOfText = splittext.indexOf('search');
-    if (indexOfText >= 0) {
-      /* */
-      this.setState({ gotoNextPage: true, cosmosDB: '' });
-    }
-
-  }
-
-  componentDidMount() {
-    this.interval = setInterval(this._tick, 1000);
-  } 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
   componentWillReceiveProps(nextProps) {
-    
-    
+
     if(nextProps.CustomFetched && !nextProps.CustomFetching) {
+      // console.log(nextProps.CustomFetched);
       const messages = JSON.parse(nextProps.CustomVisionList.Message);
       const allcustomvision = this.state.descriptiontags;
       _.map(messages.Predictions, items => {
@@ -281,8 +242,7 @@ class Home extends Component {
       });
     }
 
-    
-    if (  _.isEmpty(nextProps.CustomVisionList) && nextProps.visionFetched && nextProps.ocrFetched || _.isEmpty(nextProps.CustomVisionList) && nextProps.visionFetched && nextProps.handFetched) {
+    if (_.isEmpty(nextProps.CustomVisionList) && nextProps.visionFetched && nextProps.ocrFetched || _.isEmpty(nextProps.CustomVisionList) && nextProps.visionFetched && nextProps.handFetched ) {
       const allOrcText = [];
       const allHandText = [];
 
@@ -297,6 +257,11 @@ class Home extends Component {
       }
 
       if(!_.isEmpty(nextProps.handList)) {
+        // if (!_.isEmpty(nextProps.handList.recognitionResult)) {
+        //   _.map(nextProps.handList.recognitionResult.lines, line => {
+        //     allHandText.push(line.text);
+        //   });
+        // }
         if (!_.isEmpty(nextProps.handList.regions)) {
           _.map(nextProps.handList.regions, lines => _.map(lines.lines, item => _.map(item.words, text => allHandText.push(text.text))));
         }
@@ -336,7 +301,6 @@ class Home extends Component {
         '_ts': 1497161326,
       };
 
-      
       const allTags = [];
       const alldescriptiontags = [];
       let allcaption = '';
@@ -362,12 +326,29 @@ class Home extends Component {
           cosmosDB.ocrtags=ocr;
         }
         this.setState({ cosmosDB, tags: allTags,descriptiontags:alldescriptiontags,captionvalue:allcaption});
+       
       }
       else{
         this.setState({ cosmosDB, tags: allTags,descriptiontags:alldescriptiontags,captionvalue:allcaption,ocrvalue:orctags,handwrittenvalues:handwrittentags});
       }
     }
 
+    if (!_.isEmpty(nextProps.intent)) {
+      if (!_.isEmpty(nextProps.intent.entities)) {
+        if (nextProps.intent.entities[0].type === 'showqueuedovergooditems') {
+          console.log(nextProps);
+          this._callApi('https://asgtagur.blob.core.windows.net/ai-test/DesPath/0131736369-63169.jpg');
+          this._stopBOT();
+        } else if (nextProps.intent.entities[0].type === 'showsearchpage') {
+          this.setState({ gotoSearchPage: true });
+        }
+      }
+    }
+
+  }
+
+  _stopBOT() {
+    this.props.dispatch(stopbot());
   }
 
   _onSave() {
@@ -394,31 +375,31 @@ class Home extends Component {
     data.notes = this.state.notes;
     console.log(data);
     this.props.dispatch(saveToCosmosDB(data));
+    this._backtoHome();
   }
 
   _callBingSearchApi(query){
-    console.log(query);
-    // let url = 'https://api.cognitive.microsoft.com/bing/v7.0/images/search?q='+query+'&modules=SimilarProducts&en-us&subscription-key=aa6e71cbaf9f49d2a12e7e03e09e698e';
-    let url='https://api.cognitive.microsoft.com/bing/v7.0/images/details?imgUrl='+query+'&modules=All&mkt=en-us&subscription-key=aa6e71cbaf9f49d2a12e7e03e09e698e';
+    const url='https://api.cognitive.microsoft.com/bing/v7.0/images/details?imgUrl='+query+'&modules=All&mkt=en-us&subscription-key=aa6e71cbaf9f49d2a12e7e03e09e698e';
     this.props.dispatch(BingSearch(url));
   } 
 
   _callCustomVisionApi(query){
-    let url = 'http://fedexovergoodservices.azurewebsites.net/api/Prediction?imageURL='+query;
+    const url = 'http://fedexovergoodservices.azurewebsites.net/api/Prediction?imageURL='+query;
     this.props.dispatch(customVision(url));
   }
 
   render() {
 
     const {BingSearchList, fetching, visionFetching, visionFetched } = this.props;
-    // console.log(BingSearchList);
     
-    // console.log(this.setState.arrayImage);
+    if(this.state.gotoSearchPage) {
+      return <Redirect to="/search-assets" />;
+    }
 
     let images;
 
     if (!_.isEmpty(this.state.imagesArray)) {
-      images = _.map(_.reverse(this.state.imagesArray), (f, i) => {
+      images = _.map(this.state.imagesArray, (f, i) => {
         const status = <div className="status"><button className="btn btn-primary" type="button" onClick={() => this._callApi(f.imgurl)}>View</button></div>;
         const style = { 'backgroundImage': `url(${f.imgurl})`};
 
@@ -464,8 +445,9 @@ class Home extends Component {
     }
 
     let pageData = (
-      <PageDisplay fetching={fetching} images={images} onDrop={this._onDrop}/>
+      <HomePage fetching={fetching} images={images} onDrop={this._onDrop}/>
     );
+
     if(!_.isEmpty(BingSearchList.visuallySimilarImages) || this.state.gotoNextPage) {
       // console.log(BingSearchList);
       pageData = <BingSearchPage bingSearchList={BingSearchList} callApiFromBing={this._callApiFromBing} cosmosDB={this.state.cosmosDB}  backtoHome={this._backtoHome} />;
@@ -522,12 +504,13 @@ Home.propTypes = {
   BingSearchList:PropTypes.object,
   BingSearchFetching:PropTypes.bool,
   BingSearchFetched:PropTypes.bool,
+  arrayImage:PropTypes.array,
+  previosurl:PropTypes.string,
   LuisList:PropTypes.array,
   Luisfetching:PropTypes.bool,
   Luisfetched:PropTypes.bool,
-  history: PropTypes.func,
-  arrayImage:PropTypes.array,
-  previosurl:PropTypes.string,
+  intent: PropTypes.array,
+
 };
 
 export default Home;

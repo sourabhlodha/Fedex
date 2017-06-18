@@ -7,15 +7,10 @@ import _ from 'lodash';
 import SearchResult from './SearchResult';
 import VisionDetailPage from '../shared/VisionDetailPage';
 import SearchDropZone from './SearchDropZone';
-import BingSearchResult from './BingSearchResult';
-
-
-
-
 
 import axios from 'axios';
 
-import {onSearch, uploadAzure, clearSearch, showVisionPage, hideVisionPage, getVision, ocrVision, handWrittenVision} from '../../redux/actions';
+import {onSearch, uploadAzure, clearSearch, showVisionPage, hideVisionPage, getVision, ocrVision, handWrittenVision, stopbot} from '../../redux/actions';
 
 @connect((store) => {
   return {
@@ -42,9 +37,10 @@ import {onSearch, uploadAzure, clearSearch, showVisionPage, hideVisionPage, getV
     handFetched: store.search.handFetched,
 
     callApi: store.search.callApi,
-
-    BingSearchList: store.dropzone.BingSearchList,
-
+    uploadedImageUrl: store.search.uploadedImageUrl,
+   
+    intent: store.audio.intent,
+    
   };
 })
 
@@ -68,7 +64,6 @@ class SearchPage extends Component {
     this._callApi = this._callApi.bind(this);
     this._callOcrApi = this._callOcrApi.bind(this);
     this._callHandWrittenApi = this._callHandWrittenApi.bind(this);
-    this._onBackHomePage=this._onBackHomePage.bind(this);
 
 
     this.state = {
@@ -83,7 +78,7 @@ class SearchPage extends Component {
   }
 
   componentWillMount () {
-    localStorage.clear();
+    // localStorage.clear();
     this.props.dispatch(clearSearch());
     this.selectedCheckboxes = new Set();
   }
@@ -116,7 +111,7 @@ class SearchPage extends Component {
   }
 
   _callSearchService() {
-    let url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs?api-version=2016-09-01&search=${this.state.searchValue}&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+    let url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs?api-version=2016-09-01&search=${this.state.searchValue}&$orderby=confidence asc&highlight=ocrtags&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
     let filterParam = '&$filter=';
 
     const tagParam = [];
@@ -131,7 +126,7 @@ class SearchPage extends Component {
     filterParam += _.join(tagParam, ' or ');
 
     if (!_.isEmpty(this.state.descriptiontags) || !_.isEmpty(this.state.itemtags)) {
-      url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs?api-version=2016-09-01&search=${this.state.searchValue}${filterParam}&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+      url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs?api-version=2016-09-01&search=${this.state.searchValue}${filterParam}&$orderby=confidence asc&highlight=ocrtags&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
     }
     
     this.props.dispatch(onSearch(url));
@@ -184,10 +179,6 @@ class SearchPage extends Component {
     this.props.dispatch(handWrittenVision(imageBody));
   }
 
-  _onBackHomePage(url){
-    console.log(url);
-    // this.context.router.history.push('/Home');
-  }
   componentWillReceiveProps(nextProps) {
     
     if (nextProps.dropzoneImgUrl) {
@@ -265,10 +256,28 @@ class SearchPage extends Component {
         }
       });
     }
+
+    if (!_.isEmpty(nextProps.intent)) {
+      if (!_.isEmpty(nextProps.intent.entities)) {
+        if (nextProps.intent.entities[0].type === 'SearchItem') {
+          console.log(nextProps);
+          // this._callApi('https://asgtagur.blob.core.windows.net/ai-test/DesPath/0131736369-63169.jpg');
+          this.setState({ searchValue: nextProps.intent.entities[0].entity }, () => {
+            this._callSearchService();
+          });
+          this._stopBOT();
+        }
+      }
+    }
+
+  }
+
+  _stopBOT() {
+    this.props.dispatch(stopbot());
   }
 
   render() {
-    const { searchResult, BingSearchList, isvisionDetailPage, fetching, fetched, cosmosDB } = this.props;
+    const { searchResult, uploadedImageUrl, isvisionDetailPage, fetching, fetched, cosmosDB } = this.props;
     let searchResultPage;
     let noresult;
     if (fetched) {
@@ -285,10 +294,8 @@ class SearchPage extends Component {
         tags={tags}
         toggleDescTags={this._toggleDescTags}
         toggleItemTags={this._toggleItemTags}
+        dropzoneImgUrl={uploadedImageUrl}
       />;
-    } else if (!_.isEmpty(BingSearchList.visuallySimilarImages)) {
-      console.log(BingSearchList);
-      searchResultPage = <BingSearchResult searchResults={BingSearchList.visuallySimilarImages.value} onBackHomePage={this._onBackHomePage} />;
     }
 
     let loading;
@@ -369,10 +376,11 @@ SearchPage.propTypes = {
   isvisionDetailPage: PropTypes.bool,
   cosmosDB: PropTypes.object,
   dropzoneImgUrl: PropTypes.object,
+  uploadedImageUrl: PropTypes.object,
   visionList: PropTypes.object,
   ocrList: PropTypes.object,
   handList: PropTypes.object,
-  BingSearchList: PropTypes.array,
+  intent: PropTypes.array,
 };  
 
 

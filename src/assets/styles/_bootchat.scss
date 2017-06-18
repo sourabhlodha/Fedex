@@ -497,12 +497,7 @@ body .wc-app, .wc-app button, .wc-app input, .wc-app textarea {
 
 .wc-app ::-webkit-scrollbar-thumb {
   background-color: #dbdee1; }
-  .chatbot{
-        height: 300px;
-    width: 310px;
-    background: #FFF;
-  }
-
+  
   .wc-mic {
   position: absolute;
   right: 0;
@@ -517,8 +512,9 @@ body .wc-app, .wc-app button, .wc-app input, .wc-app textarea {
   bottom: 10px;
 }
 .wc-chatview-panel, #BotChatGoesHere {
-  width: 400px;
-  height: 350px;
+  width: 270px;
+  height: 250px;
   background: #fff;
   z-index: 99999;
+  border: 1px solid #dbdee1;
 }

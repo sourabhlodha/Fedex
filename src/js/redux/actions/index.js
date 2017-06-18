@@ -1,5 +1,5 @@
 import { actionTypes as types, urls } from '../constants';
-import { post,get } from '../helpers';
+import { post, get, synthesize } from '../helpers';
 import request from 'superagent';
 import axios from 'axios';
 import _ from 'lodash';
@@ -183,6 +183,38 @@ export const LuisSearch = (url) => dispatch => {
   });
 };
 
+// https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&highlight=captions&suggesterName=sg&fuzzy=false&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
+
+// https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
+
+// https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&$orderby=confidence desc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
+
+
+export const getTTS = (token, text) => dispatch => {
+  dispatch({ type: types.TTS_AUDIO_TEXT, text});
+  synthesize({
+    token,
+    text,
+    success: types.GET_TTS_DATA,
+    dispatch,
+  });
+};
+
+export const callBotApi = (url) => dispatch => {
+  dispatch({ type: types.BOT_REQUEST });
+  get({
+    url: url,
+    success: types.BOT_SUCCESS,
+    failure: types.BOT_FAILURE,
+    dispatch,
+  });
+};
+
+
+export const stopbot = () => dispatch => {
+  dispatch({type: types.STOP_BOT});
+};
+
 export const PageDisplayModal = () => dispatch => {
   dispatch({ type: types.SHOW_PageDisplay_Modal});
 };
@@ -195,8 +227,3 @@ export const PageDisplayBingPage = () => dispatch => {
 export const PageDisplayBingPageandModal = () => dispatch => {
   dispatch({ type: types.SHOW_PageDisplay_BingPageAndModal});
 };
-// https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&highlight=captions&suggesterName=sg&fuzzy=false&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
-
-// https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4
-
-// https://fedexovergoods.search.windows.net/indexes/overgood/docs?api-version=2016-09-01&search=water&$orderby=confidence desc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4

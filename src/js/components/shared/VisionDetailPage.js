@@ -37,7 +37,7 @@ const VisionDetailPage = ({ ...props }) => {
     'width': `${confidence}%`,
   };
   let savebtn;
-  console.log(props.bingSearch);
+
   if (props.onSave) {
     // const text = JSON.parse(props.cosmosDB.captions);
     savebtn = (<div className="modal-footer d-flex justify-content-between">
@@ -79,12 +79,12 @@ const VisionDetailPage = ({ ...props }) => {
   let notes;
   if (props.search) {
     notes = (<li>
-              <div className="title">Notes</div>
+              <div className="title">Process and comment</div>
               {props.cosmosDB.notes}
             </li>);
   } else {
     notes = (<li>
-              <div className="title">Notes</div>
+              <div className="title">Process and comment</div>
               <textarea placeholder="Add notes about this product" className="form-control" value={props.notesValue} onChange={props.onNotesChange} rows="2"></textarea>
             </li>);
   }
@@ -124,23 +124,23 @@ const VisionDetailPage = ({ ...props }) => {
                   <ul>
                     
                     <li>
-                      <div className="title">Captions:</div>
+                      <div className="title">Overgood Item Summary:</div>
                       <div className="info">{captions}</div>
                     </li>
                     <li>
-                      <div className="title">Tags:</div>
+                      <div className="title">Overgood Tags:</div>
                       <div className="info">{badges}</div>
                     </li>
                     <li>
-                      <div className="title">Description Tags:</div>
+                      <div className="title">Overgood Description Tags:</div>
                       <div className="info">{decTags}</div>
                     </li>
                     <li>
-                      <div className="title">OCR Text</div>
+                      <div className="title">Overgood OCR Text</div>
                       <div className="info">{contentText}</div>
                     </li>
                     <li>
-                      <div className="title">Hand Written Text</div>
+                      <div className="title">Overgood Hand Written Text</div>
                       <div className="info">{handwrittenText}</div>
                     </li>
                     {notes}

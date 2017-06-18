@@ -5,8 +5,7 @@ import topuploadspeeds from '../../../assets/images/topuploadspeeds.png';
 import DropZonePage from './DropZonePage';
 
 
-const PageDisplay = ({ ...props }) => {
-  // console.log(props);
+const HomePage = ({ ...props }) => {
   return (
       <div className="container-fluid landingPage">
         <div className="row">
@@ -49,16 +48,12 @@ const PageDisplay = ({ ...props }) => {
 };
 
 
-PageDisplay.propTypes = {
+HomePage.propTypes = {
   searchResults: PropTypes.array,
-//   viewDetails: PropTypes.func,
-//   descriptiontags: PropTypes.array,
-//   tags: PropTypes.array,
-//   toggleDescTags: PropTypes.func,
-//   toggleItemTags: PropTypes.func,
   fetching: PropTypes.bool,
   images: PropTypes.array,
   onDrop: PropTypes.func,
 };
 
-export default PageDisplay;
+export default HomePage;
+
