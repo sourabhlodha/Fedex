@@ -88,8 +88,8 @@ class Home extends Component {
     this._previosOcrTags=this._previosOcrTags.bind(this);
     this._backtoHome=this._backtoHome.bind(this);
     this._onDropBing=this._onDropBing.bind(this);
-    this._onTextBingSearch=this._onTextBingSearch.bind(this);
-    this._onBingSearchTextChange=this._onBingSearchTextChange.bind(this);
+    this._callBingTextApi = this._callBingTextApi.bind(this);
+
     this.state = {
       files: [],
       index: 0,
@@ -116,10 +116,6 @@ class Home extends Component {
       previosOcrTags:'',
       customconfidence:0,
       bingImageSearch:false,
-      searchValue:'',
-      
-      
-
     };
   }
 
@@ -130,11 +126,7 @@ class Home extends Component {
     this.setState({ imagesArray: initialImages, gotoSearchPage: false });
   }
 
-  _onBingSearchTextChange(e) {
-    this.setState({ searchValue: e.target.value });
-    console.log(this.state.searchvalue);
-  }
-
+  
 
 
  
@@ -148,10 +140,6 @@ class Home extends Component {
     });
   }
 
-  _onTextBingSearch(){
-    console.log(value);
-    // this._callBingTextApi(text);
-  }
   _onDropBing(files) {
     this.setState({bingImageSearch:true});
     this.setState({ files, index: 0 }, () => {
@@ -498,7 +486,7 @@ class Home extends Component {
 
     if(!_.isEmpty(BingSearchList.visuallySimilarImages) || this.state.gotoNextPage || !_.isEmpty(BingSearchList.value)) {
       // console.log(BingSearchList);
-      pageData = <BingSearchPage bingSearchList={BingSearchList} callApiFromBing={this._callApiFromBing} cosmosDB={this.state.cosmosDB}  backtoHome={this._backtoHome}  onDrop={this._onDropBing}  onTextBingSearch={this. _onTextBingSearch}  onBingSearchTextChange={this._onBingSearchTextChange} />;
+      pageData = <BingSearchPage bingSearchList={BingSearchList} callApiFromBing={this._callApiFromBing} cosmosDB={this.state.cosmosDB}  backtoHome={this._backtoHome}  onDrop={this._onDropBing} onTextBingSearch={this. _callBingTextApi}  />;
     }
 
 

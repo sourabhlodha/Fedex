@@ -20,24 +20,15 @@ class SearchPage extends Component {
   }
   _onSearchChange(e) {
     this.setState({ searchValue: e.target.value });
-    
   }
 
   _onSearch(e) {
     e.preventDefault();
-    
+    this.props.onTextBingSearch(this.state.searchValue);
   }
 
-  
-
-  
-
- 
-  
-  
-
   render() {
-    const { bingSearchList, callApiFromBing,cosmosDB,backtoHome,onDrop,onTextBingSearch,onBingSearchTextChange} = this.props;  
+    const { bingSearchList, callApiFromBing, cosmosDB, backtoHome, onDrop } = this.props;  
     
     let BingData;
     if(bingSearchList.visuallySimilarImages){
