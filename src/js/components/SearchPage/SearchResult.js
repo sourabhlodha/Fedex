@@ -28,7 +28,15 @@ const SearchResult = ({ ...props }) => {
     const score = _.head(result);
 
     
-    const confidence = Number(parseFloat(score * 100).toFixed(0));
+    let confidence = Number(parseFloat(score * 100).toFixed(0));
+    if(confidence >= 100) {
+      confidence = 100;
+    }
+    let className;
+    if (confidence <= 13) {
+      className = 'dark';
+    }
+
     const style = {
       'width': `${confidence}%`,
     };
@@ -43,7 +51,7 @@ const SearchResult = ({ ...props }) => {
             <div className="product-desc">
               <div className="confidence display-progress">
                 <div className="title">Search Score: <span className="badge badge-primary score-value">{score}</span></div>
-                <div className="info">
+                <div className={`info ${className}`}>
                   <span className="perc">{confidence}%</span>
                   <span className="progress"><span className="progress-bar" style={style}></span></span>
                 </div>
@@ -70,32 +78,31 @@ const SearchResult = ({ ...props }) => {
     );
   });
 
-  const uploadImage = {
-    'backgroundImage': `url(${props.dropzoneImgUrl})`,
-  };
+  // const uploadImage = {
+  //   'backgroundImage': `url(${props.dropzoneImgUrl})`,
+  // };
 
-  let uploadImageBox;
-  if (props.dropzoneImgUrl) {
-    uploadImageBox = (<div className="card dz-uploadimage">
-          <div className="product-list">
-            <div className="product-list-box">
-              <div className="product-desc">
-                Your are search for :
-              </div>
-              <div className="product-image">
-                <div className="full-image"  style={uploadImage}></div>
-              </div>
-            </div>
-          </div>
-        </div>);
-  }
+  // let uploadImageBox;
+  // if (props.dropzoneImgUrl) {
+  //   uploadImageBox = (<div className="card dz-uploadimage">
+  //         <div className="product-list">
+  //           <div className="product-list-box">
+  //             <div className="product-desc">
+  //               Your are search for :
+  //             </div>
+  //             <div className="product-image">
+  //               <div className="full-image"  style={uploadImage}></div>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>);
+  // }
 
  
   
   return (
     <div className="container-fluid search-result-page">
-      <div className="card-columns">
-        {uploadImageBox}
+      <div className="card-deck">
         {searchList}
       </div>
     </div>

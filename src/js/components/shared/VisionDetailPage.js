@@ -33,6 +33,13 @@ const VisionDetailPage = ({ ...props }) => {
   if (props.cosmosDB.confidence) {
     confidence = Number(parseFloat(props.cosmosDB.confidence * 100).toFixed(0));
   }
+  let className;
+  if (confidence <= 13) {
+    className = 'dark';
+  }
+  if (confidence >= 100) {
+    confidence = 100;
+  }
   const style = {
     'width': `${confidence}%`,
   };
@@ -110,7 +117,7 @@ const VisionDetailPage = ({ ...props }) => {
                 <div className="product-confidence">
                   <div className="display-progress padding">
                       <div className="title">Confidence:</div>
-                      <div className="info">
+                      <div className={`info ${className}`}>
                         <span className="perc">{confidence}%</span>
                         <span className="progress"><span className="progress-bar" style={style}></span></span>
                       </div>

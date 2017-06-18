@@ -336,8 +336,8 @@ button.card{
 
 .chatbot{
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 30px;
+  right: 40px;
   &-audio {
     display: none;
   }
@@ -553,7 +553,7 @@ button.card{
 
 
 .navbar {
-  background-color: #f3f1f1;
+  background-color: #fff;
 }
 
 
@@ -895,6 +895,14 @@ button.card{
         background-color: $blue;
       }
     }
+    &.dark {
+      .progress-bar{
+        background-color: #ff6060;
+      }
+      .perc{
+        color: #000;
+      }
+    }
   }
 }
 .product-list {
@@ -953,6 +961,28 @@ button.card{
 .search-result-page{
   background-color: #fafafa;
   padding: 30px 15px;
+  .card {
+    width: 25%;
+    padding: 0 10px;
+  }
+  .card-deck{
+    margin: 0 -10px;
+  }
+  .card-deck .card {
+    flex: inherit;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    margin-bottom: 15px;
+    .product-list{
+      border: 1px solid #dcdcdc;
+      background-color: #fff;
+      width: 100%;
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+    }
+  }
 }
 
 /*tags css*/
@@ -1055,26 +1085,28 @@ button.card{
   .btn-close {
     position: absolute;
     background: transparent;
-    color: white;
+    color: $blue;
     top: 10px;
     right: 28px;
     font-size: 28px;
   }
   .search {
+    background: #fff;
     padding: 70px 40px 20px;
   }
-  .fedex-inverse{
+  .input-group{
+    border: 1px solid #9c9c9c;
+  }
+  .logo{
     height: 60px;
     overflow: hidden;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 14px;
+    left: 46px;
     width: 300px;
-    > svg{
-      position: absolute;
-      top: -61px;
-      left: -81px;
-      height: 210px;
+    svg{
+      width: 150px;
+      height: auto;
     }
   }
 }
@@ -1098,4 +1130,145 @@ button.card{
     .fedex-logo {
       margin-bottom: 40px;
     }
+}
+
+.retail-login{
+  background: #fff;
+  .logo {
+    margin-bottom: 20px;
+    svg {
+      width: 200px;
+      height: auto;
+    }
+  }
+}
+
+.navbar-brand .logo {
+  svg {
+    width: 150px;
+    height: auto;
+  }
+}
+.navbar {
+  .nav-link{
+    color: #2c2c2c;
+    font-size: 18px;
+    &.selected {
+      color: $blue;
+    }
+  }
+}
+
+.home-top {
+  background: #fff;
+  border-radius: 2px;
+  padding: 15px;
+  h1{
+    font-size: 30px;
+    font-family: $font-light;
+    margin-bottom: 15px;
+    color: $blue;
+  }
+  .overgood-stats {
+    text-align: center;
+    img {vertical-align: top}
+  }
+}
+
+.dropzone-page {
+  padding: 20px 0;
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+  .dropzone-stats, .dropzone {
+    background-color: #fff;
+    border-radius: 2px;
+    padding: 2px;
+    float: left;
+    width: 15%;
+    height: 325px;
+    overflow: hidden;
+    text-align: center;
+  }
+  .img-upload-list {
+    float: left;
+    width: 85%;
+    padding: 0 20px;
+    padding-right: 0;
+    .img-upload-box {
+      border-radius: 2px;
+      background: #fff;
+      padding: 10px;
+      height: 325px;
+      overflow: auto;
+      h2 {
+        font-size: 18px;
+        font-family: $font-bold;
+        color: $blue;
+        margin-bottom: 20px;
+      }
+    }
+    ul{
+      justify-content: flex-start;
+      li{
+        border: 0;
+        padding: 0 15px;
+        .status {
+          padding: 0;
+          .btn {
+            width: 100%;
+          }
+        }
+        .dzblock{
+          background: #fff;
+        }
+      }
+    }
+    ul li .thumb {
+      width: 101px;
+      height: 100px;
+      margin-bottom: 10px;
+    }
+  } 
+  .dropzone{
+    margin: 0;
+    padding: 48px 10px;
+    img {
+      height: auto;
+    }
+    span {
+      color: $blue;
+    }
+
+  }
+}
+
+.bing-search {
+  .card {
+    width: 25%;
+    padding: 0 10px;
+  }
+  .card-deck{
+    margin: 0 -10px;
+  }
+  .card-deck .card {
+    flex: inherit;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    margin-bottom: 15px;
+    .card-bing{
+      border: 1px solid #dcdcdc;
+      background-color: #fff;
+      width: 100%;
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+    }
+    img {
+      height: auto;
+    }
+  }
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 
+import upload from '../../../assets/images/upload.jpg';
+
 const DropZonePage = ({...props}) => {
   let loading;
   if(props.fetching) {
@@ -12,18 +14,23 @@ const DropZonePage = ({...props}) => {
                   </div></div>);
   }
   return (
-    <div>
-      <Dropzone onDrop={props.onDrop} className="dropzone" activeClassName="dropzone-active">
-        <p>Try dropping some files here, or click to select files to upload.</p>
-      </Dropzone>
+    <div className="dropzone-page">
 
+      <Dropzone onDrop={props.onDrop} className="dropzone" activeClassName="dropzone-active">
+        <img src={upload} />
+        <span>Upload overgood items</span>
+      </Dropzone>
+      
       <div className="img-upload-list">
-        {loading}
-        <ul>
-          { props.images }
-        </ul>
-        
+        <div className="img-upload-box">
+          <h2>Queued overgood items</h2>
+          <ul>
+            { props.images }
+            <li className="loading">{loading}</li>
+          </ul>
+        </div>
       </div>
+
     </div>
   );
 };

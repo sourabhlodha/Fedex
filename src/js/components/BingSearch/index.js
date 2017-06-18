@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import BingSearchResult from './BingSearchResult';
-import FedexLogoInverse from './FedexLogoInverse';
+import Logo from '../../shared/Logo';
 import SearchDropZone from './SearchDropZone';
 
 class SearchPage extends Component {
@@ -36,7 +36,7 @@ class SearchPage extends Component {
     return (
       <div className="search-page page-bingSearch">
         <div className="container-fluid search">
-          <FedexLogoInverse />
+          <Logo />
           <form onSubmit={this._onSearch}>
             <div className="input-group">
               <input type="text" className="form-control" value={this.state.searchValue} placeholder="Search for..." onChange={this._onSearchChange}/>
