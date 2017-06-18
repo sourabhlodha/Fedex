@@ -101,7 +101,7 @@ class SearchPage extends Component {
   }
 
   _onSuggest(value) {
-    const url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs/suggest?search=${value}&suggesterName=overgoodssearch&fuzzy=false&api-version=2016-09-01&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+    const url = `https://fedexovergoods.search.windows.net/indexes/fedexovergoodsitems/docs/suggest?search=${value}&suggesterName=overgoodssearch&fuzzy=false&api-version=2016-09-01&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
 
     axios.get(url)
     .then(response => {
@@ -111,7 +111,7 @@ class SearchPage extends Component {
   }
 
   _callSearchService() {
-    let url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs?api-version=2016-09-01&search=${this.state.searchValue}&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+    let url = `https://fedexovergoods.search.windows.net/indexes/fedexovergoodsitems/docs?api-version=2016-09-01&search=${this.state.searchValue}&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
     let filterParam = '&$filter=';
 
     const tagParam = [];
@@ -126,7 +126,7 @@ class SearchPage extends Component {
     filterParam += _.join(tagParam, ' or ');
 
     if (!_.isEmpty(this.state.descriptiontags) || !_.isEmpty(this.state.itemtags)) {
-      url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs?api-version=2016-09-01&search=${this.state.searchValue}${filterParam}&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+      url = `https://fedexovergoods.search.windows.net/indexes/fedexovergoodsitems/docs?api-version=2016-09-01&search=${this.state.searchValue}${filterParam}&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
     }
     
     this.props.dispatch(onSearch(url));
