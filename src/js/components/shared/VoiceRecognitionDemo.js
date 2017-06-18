@@ -30,6 +30,7 @@ class VoiceRecognitionDemo extends Component {
     this._onStart = this._onStart.bind(this);
     this._reset = this._reset.bind(this);
     this._callIntentApi = this._callIntentApi.bind(this);
+    this._onSpeekClick = this._onSpeekClick.bind(this);
 
     this.state = {
       audioUrl: '',
@@ -42,11 +43,12 @@ class VoiceRecognitionDemo extends Component {
       loading: false,
       count: 0,
       page: 'start',
+      speekButton: true,
     };
   }
   
-  componentDidMount() {
-    this.issueToken(this.state.audioText);
+  _onSpeekClick() {
+    this.setState({ speekButton: false }, () => this.issueToken(this.state.audioText));
   }
 
   issueToken = async (text) => {
@@ -75,7 +77,12 @@ class VoiceRecognitionDemo extends Component {
       const audio = document.querySelector('audio#audio');
       setTimeout(() => {
         const duration = (audio.duration) * 1000;
-        setTimeout(() => this._onStart(), duration);
+        if (this.state.speekButton) {
+          setTimeout(() => this.setState({ audioText: 'Hello I am your overgood advisor, how can i help you? Please use Quit or Goodby to shut me down.', audioUrl: '', speekButton: true }), duration);
+        } else {
+          setTimeout(() => this._onStart(), duration);
+        }
+        
       }, 500);
     });
     // const audio = document.getElementById('audio');
@@ -134,6 +141,10 @@ class VoiceRecognitionDemo extends Component {
           this.setState({ page: 'search' });
           const text = 'Let me know what you want to search from overgoods?';
           this.issueToken(text);
+        } else if (nextProps.intent.entities[0].type === 'exitcommand') {
+          this.setState({ speekButton: true });
+          const text = 'Thank you! Goodby!';
+          this.issueToken(text);
         } else {
           console.log(nextProps.intent);
         }
@@ -159,6 +170,8 @@ class VoiceRecognitionDemo extends Component {
           audioSource='mic'
           onStart={this._onStart}
           reset={this._reset}
+          speekButton={this.state.speekButton}
+          onSpeekClick={this._onSpeekClick}
         />        
 
         {this.state.start && (

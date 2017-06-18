@@ -116,6 +116,7 @@ class LandingPage extends Component {
       previosOcrTags:'',
       customconfidence:0,
       bingImageSearch:false,
+      newConfidence: '',
     };
   }
 
@@ -208,7 +209,7 @@ class LandingPage extends Component {
 
     this._callOcrApi(imageBody);
     this._callHandWrittenApi(imageBody);
-    this.setState({ guid: Guid.raw() });
+    this.setState({ guid: Guid.raw(), disableCustomVisionButton: false });
   }
 
   _callOcrApi(imageBody) {  
@@ -231,24 +232,24 @@ class LandingPage extends Component {
         
       }
     }
+
+
     if(nextProps.CustomFetched && !nextProps.CustomFetching) {
-      let CustomVisionConfidence;
       
       const messages = JSON.parse(nextProps.CustomVisionList.Message);
       const allcustomvision = this.state.descriptiontags;
+      let newConfidence;
       _.map(messages.Predictions, items => {
         let confidence = items.Probability;
         confidence = confidence * 100;
         if(confidence > 50) {
           allcustomvision.push(items.Tag);
-          CustomVisionConfidence=confidence;
-
+          newConfidence = items.Probability;
         }
       });
-      CustomVisionConfidence=(CustomVisionConfidence.toFixed(3))/100;
-      this.setState({cosmosDB:{confidence:CustomVisionConfidence,url:nextProps.imageUrl}});
-
-      this.setState({ descriptiontags: allcustomvision, disableCustomVisionButton: true});
+      const cosmosDB = _.extend({}, this.state.cosmosDB);
+      cosmosDB.confidence = Number(newConfidence.toFixed(3));
+      this.setState({ cosmosDB, descriptiontags: allcustomvision, disableCustomVisionButton: true });
       
     }
 
@@ -304,7 +305,6 @@ class LandingPage extends Component {
       if (!_.isEmpty(nextProps.visionList.tags)) {
         _.map(nextProps.visionList.tags, item => tags.push(JSON.stringify(item)));
       }
-
       const cosmosDB = {
         'captions': captions,
         'confidence': Number(Number(nextProps.visionList.description.captions[0].confidence).toFixed(3)),

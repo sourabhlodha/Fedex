@@ -91,6 +91,14 @@ textarea {
   + .btn {
     margin-left: 10px;
   }
+  &.logout-button {
+    background-color: $blue;
+    color: $white;
+    &:hover, &:focus, &:active {
+      background-color: lighten($blue, 20%);
+      color: $white;
+    }
+  }
 }
 
 .input-group-btn {

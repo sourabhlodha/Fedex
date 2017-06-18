@@ -55,7 +55,11 @@ const ChatBot = ({...props}) => {
         {icon}</div>);
 
   let button;
-  if (props.listening) {
+  if (props.speekButton) {
+    button = (<button className={`chatbot-button ${isAudioAvailable}`} onClick={props.onSpeekClick}>
+                {svg}
+              </button>);
+  } else if (props.listening) {
     button = (<button className={`chatbot-button ${isAudioAvailable}`} onClick={props.reset}>
                 {svg}
               </button>);
@@ -77,12 +81,14 @@ const ChatBot = ({...props}) => {
 ChatBot.propTypes = {
   onStart: PropTypes.func,
   reset: PropTypes.func,
+  onSpeekClick: PropTypes.func,
   listening: PropTypes.bool,
   loading: PropTypes.bool,
   audioText: PropTypes.string,
   audioUrl: PropTypes.string,
   ttsFetching: PropTypes.bool,
   ttsFetched: PropTypes.bool,
+  speekButton: PropTypes.bool,
   audioSource: PropTypes.string,
 };
 

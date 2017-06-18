@@ -27,7 +27,7 @@ const initialState = {
 
   cosmosFetching: false,
 
-  CustomVisionList: '',
+  CustomVisionList: {},
   CustomFetching: false,
   CustomFetched: false,
   CustomErr: '',
@@ -56,7 +56,7 @@ const dropzone = (state = initialState, action) => {
 
       cosmosFetching: false,
 
-      CustomVisionList: '',
+      CustomVisionList: {},
       CustomFetching: false,
       CustomFetched: false,
       CustomErr: '',
@@ -85,7 +85,7 @@ const dropzone = (state = initialState, action) => {
     return {...state, imageUrl: action.body};
 
   case types.VISION_REQUEST:
-    return {...state, visionFetching: true, fetched: false, fetching: false, ocrFetched: false, ocrFetching: false, handFetched: false, handFetching: false, dropzoneImgUrl: ''};
+    return {...state, visionFetching: true, fetched: false, fetching: false, ocrFetched: false, ocrFetching: false, handFetched: false, handFetching: false, dropzoneImgUrl: '', CustomFetching: false, CustomFetched: false};
 
   case types.VISION_SUCCESS:
     return {
@@ -191,7 +191,7 @@ const dropzone = (state = initialState, action) => {
 
       cosmosFetching: false,
 
-      CustomVisionList: '',
+      CustomVisionList: {},
       CustomFetching: false,
       CustomFetched: false,
       CustomErr: '',
