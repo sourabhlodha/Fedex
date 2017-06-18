@@ -16,7 +16,7 @@ const Login = ({ user, login }) => {
   };
 
   return (
-    <div>
+    <div className="login-page-component">
       <Form onSubmit={handleSubmit} />
       {user.user.token && <Redirect to="/" />}
     </div>

@@ -4,6 +4,11 @@ import fedexlogo from '../../assets/images/fedex-logo.svg';
 
 
 const Header = () => { 
+  
+  const onLogout = () => {
+    window.location.reload();
+  };
+
   return (
     <nav className="navbar navbar-toggleable-md">
       <Link to="/" className="navbar-brand"><img src={fedexlogo} alt="fedexlogo" width="160" /></Link>
@@ -17,6 +22,10 @@ const Header = () => {
             <NavLink exact to="/search-assets" className="nav-link" activeClassName="selected">Search Assets</NavLink>
           </li>
         </ul>
+      </div>
+      
+      <div className="logout">
+        <button onClick={onLogout} className="btn logout-button">Logout</button>
       </div>
     </nav>
   );

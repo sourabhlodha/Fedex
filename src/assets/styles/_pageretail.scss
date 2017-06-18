@@ -34,6 +34,7 @@
 
   &-login{
     max-width: 600px;
+    width: 100%;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid $blue;
@@ -1085,4 +1086,16 @@ button.card{
     color: white;
     font-size: 28px;
   }
+}
+
+.login-page-component {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .fedex-logo {
+      margin-bottom: 40px;
+    }
 }

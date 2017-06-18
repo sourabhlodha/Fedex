@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import fedexlogo from '../../../assets/images/fedex-logo.svg';
 
 const Form = ({ onSubmit }) => (
   <div className="retail-login">
-      <h3>Fedex Login </h3>
+      <div className="fedex-logo text-center"><img src={fedexlogo} alt="fedexlogo" width="160" /></div>
       <form onSubmit={onSubmit}>
         <div className="form-box">
           <label htmlFor="userName" className="form-label">User Name</label>
