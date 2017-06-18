@@ -2,19 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-// import SearchFilters from './SearchFilters';
-// <div className="col-sm-4 hide">
-//   <SearchFilters 
-//     descriptiontags={props.descriptiontags} 
-//     tags={props.tags}
-//     confidence={30} 
-//     toggleDescTags={props.toggleDescTags}
-//     toggleItemTags={props.toggleItemTags}
-//   />
-//   </div>
-
 const SearchResult = ({ ...props }) => {
-  // console.log(props);
   const results = [];
   
   _.map(props.searchResults, product => {
@@ -82,6 +70,10 @@ const SearchResult = ({ ...props }) => {
     );
   });
 
+  const uploadImage = {
+    'backgroundImage': `url(${props.dropzoneImgUrl})`,
+  };
+
   let uploadImageBox;
   if (props.dropzoneImgUrl) {
     uploadImageBox = (<div className="card dz-uploadimage">
@@ -98,9 +90,7 @@ const SearchResult = ({ ...props }) => {
         </div>);
   }
 
-  const uploadImage = {
-    'backgroundImage': `url(${props.dropzoneImgUrl})`,
-  };
+ 
   
   return (
     <div className="container-fluid search-result-page">

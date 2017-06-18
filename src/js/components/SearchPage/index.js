@@ -111,7 +111,7 @@ class SearchPage extends Component {
   }
 
   _callSearchService() {
-    let url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs?api-version=2016-09-01&search=${this.state.searchValue}&$orderby=confidence asc&highlight=ocrtags&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+    let url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs?api-version=2016-09-01&search=${this.state.searchValue}&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
     let filterParam = '&$filter=';
 
     const tagParam = [];
@@ -126,7 +126,7 @@ class SearchPage extends Component {
     filterParam += _.join(tagParam, ' or ');
 
     if (!_.isEmpty(this.state.descriptiontags) || !_.isEmpty(this.state.itemtags)) {
-      url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs?api-version=2016-09-01&search=${this.state.searchValue}${filterParam}&$orderby=confidence asc&highlight=ocrtags&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+      url = `https://fedexovergoods.search.windows.net/indexes/temp3/docs?api-version=2016-09-01&search=${this.state.searchValue}${filterParam}&$orderby=confidence asc&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
     }
     
     this.props.dispatch(onSearch(url));
@@ -180,15 +180,10 @@ class SearchPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    
     if (nextProps.dropzoneImgUrl) {
       this.setState({ apiCall: 0 });
       this._callApi(nextProps.dropzoneImgUrl);
     }
-
-    // if (nextProps.fetching) {
-    //   this.setState({ apiCall: 0 });
-    // }
 
     if (nextProps.callApi) {
       this.setState({ apiCall: this.state.apiCall + 1 }, ()=> {
@@ -201,7 +196,6 @@ class SearchPage extends Component {
 
           if (!_.isEmpty(nextProps.ocrList)){
             if(!_.isEmpty(nextProps.ocrList.regions)) {
-              console.log('is ocr available');
               _.map(nextProps.ocrList.regions, region => {
                 _.map(region.lines, line => {
                   _.map(line.words, word => {
@@ -228,9 +222,7 @@ class SearchPage extends Component {
           
 
           if (!_.isEmpty(nextProps.visionList)) {
-            console.log('visionlist');
             if (!_.isEmpty(nextProps.visionList.description.captions)) {
-              console.log(nextProps.visionList.description.captions[0].text);
               captions.push(nextProps.visionList.description.captions[0].text);
             }
             if (!_.isEmpty(nextProps.visionList.description.tags)) {
@@ -248,8 +240,6 @@ class SearchPage extends Component {
           }
           const itemtags = tags;
 
-          // console.log(searchValue, itemtags, descriptiontags);
-
           this.setState({ searchValue, itemtags, descriptiontags}, () => {
             this._callSearchService();
           });
@@ -260,8 +250,6 @@ class SearchPage extends Component {
     if (!_.isEmpty(nextProps.intent)) {
       if (!_.isEmpty(nextProps.intent.entities)) {
         if (nextProps.intent.entities[0].type === 'SearchItem') {
-          console.log(nextProps);
-          // this._callApi('https://asgtagur.blob.core.windows.net/ai-test/DesPath/0131736369-63169.jpg');
           this.setState({ searchValue: nextProps.intent.entities[0].entity }, () => {
             this._callSearchService();
           });

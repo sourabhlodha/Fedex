@@ -87,6 +87,8 @@ class Home extends Component {
     this._previosHandwrittenTags=this._previosHandwrittenTags.bind(this);
     this._previosOcrTags=this._previosOcrTags.bind(this);
     this._backtoHome=this._backtoHome.bind(this);
+    this._onDropBing=this._onDropBing.bind(this);
+    this._callBingTextApi = this._callBingTextApi.bind(this);
 
     this.state = {
       files: [],
@@ -112,7 +114,8 @@ class Home extends Component {
       previosurl:'',
       previosHandwrittenTags:'',
       previosOcrTags:'',
-
+      customconfidence:0,
+      bingImageSearch:false,
     };
   }
 
@@ -123,12 +126,21 @@ class Home extends Component {
     this.setState({ imagesArray: initialImages, gotoSearchPage: false });
   }
 
+  _onCustomConfidence(CustomVisionConfidence){
+    this.setState({ customconfidence: CustomVisionConfidence});
+  }
   _backtoHome() {
     this.setState({ gotoNextPage: false }, () => {
       this.props.dispatch(clearAll());
     });
   }
 
+  _onDropBing(files) {
+    this.setState({bingImageSearch:true});
+    this.setState({ files, index: 0 }, () => {
+      this._uploadToAWS(files);
+    });
+  }
 
   _onDrop(files) {
     this.setState({ files, index: 0 }, () => {
@@ -212,8 +224,16 @@ class Home extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
+    if(this.state.bingImageSearch){
+      if (nextProps.dropzoneImgUrl) {
+        this.setState({ apiCall: 0 });
+        this._callBingSearchApi(nextProps.dropzoneImgUrl);
+        
+      }
+    }
     if(nextProps.CustomFetched && !nextProps.CustomFetching) {
+      let CustomVisionConfidence;
+      
       const messages = JSON.parse(nextProps.CustomVisionList.Message);
       const allcustomvision = this.state.descriptiontags;
       _.map(messages.Predictions, items => {
@@ -221,10 +241,14 @@ class Home extends Component {
         confidence = confidence * 100;
         if(confidence > 50) {
           allcustomvision.push(items.Tag);
+          CustomVisionConfidence=confidence;
+
         }
       });
+      CustomVisionConfidence=(CustomVisionConfidence.toFixed(3))/100;
+      this.setState({cosmosDB:{confidence:CustomVisionConfidence,url:nextProps.imageUrl}});
 
-      this.setState({ descriptiontags: allcustomvision, disableCustomVisionButton: true });
+      this.setState({ descriptiontags: allcustomvision, disableCustomVisionButton: true});
       
     }
 
@@ -373,12 +397,18 @@ class Home extends Component {
     data.notes = this.state.notes;
     console.log(data);
     this.props.dispatch(saveToCosmosDB(data));
+    this._backtoHome();
   }
 
   _callBingSearchApi(query){
     const url='https://api.cognitive.microsoft.com/bing/v7.0/images/details?imgUrl='+query+'&modules=All&mkt=en-us&subscription-key=aa6e71cbaf9f49d2a12e7e03e09e698e';
     this.props.dispatch(BingSearch(url));
   } 
+  _callBingTextApi(query){
+    const url='https://api.cognitive.microsoft.com/bing/v7.0/images/search?q='+query+'&en-us&subscription-key=aa6e71cbaf9f49d2a12e7e03e09e698e';
+    this.props.dispatch(BingSearch(url));
+  }
+  
 
   _callCustomVisionApi(query){
     const url = 'http://fedexovergoodservices.azurewebsites.net/api/Prediction?imageURL='+query;
@@ -445,9 +475,9 @@ class Home extends Component {
       <HomePage fetching={fetching} images={images} onDrop={this._onDrop}/>
     );
 
-    if(!_.isEmpty(BingSearchList.visuallySimilarImages) || this.state.gotoNextPage) {
+    if(!_.isEmpty(BingSearchList.visuallySimilarImages) || this.state.gotoNextPage || !_.isEmpty(BingSearchList.value)) {
       // console.log(BingSearchList);
-      pageData = <BingSearchPage bingSearchList={BingSearchList} callApiFromBing={this._callApiFromBing} cosmosDB={this.state.cosmosDB}  backtoHome={this._backtoHome} />;
+      pageData = <BingSearchPage bingSearchList={BingSearchList} callApiFromBing={this._callApiFromBing} cosmosDB={this.state.cosmosDB}  backtoHome={this._backtoHome}  onDrop={this._onDropBing} onTextBingSearch={this. _callBingTextApi}  />;
     }
 
     return (

@@ -66,9 +66,6 @@ const dropzone = (state = initialState, action) => {
       BingSearchFetched: false,
       BingErr: '',
       
-      Modal:false,
-      BingPage:false,
-      DropPage:false,
     };
 
   case types.DROPZONE_REQUEST :
@@ -142,8 +139,10 @@ const dropzone = (state = initialState, action) => {
     
     
   case types.SAVE_COSMOS_DB_SUCCESS:
-    return {...state, visionFetched: false, visionFetching: false };
-
+    return {...state, visionFetched: false, visionFetching: false ,
+      BingSearchFetching: false,
+      BingSearchFetched: true,
+    };
 
   case types.CUSTOM_VISION_REQUEST:
     return {...state, CustomFetching: true, dropzoneImgUrl: '', fetched: false, fetching: false};
@@ -200,15 +199,7 @@ const dropzone = (state = initialState, action) => {
   case types.BING_SEARCH_FAILURE:
     return {...state, BingSearchFetching: false, handErr: action.data};
 
-  case types.SHOW_PageDisplay_Modal:
-    return {...state,  Modal: true, BingPage: false, DropPage:false };
-  case types.SHOW_PageDisplay_DropPage:
-    return {...state, Modal:false, BingPage:false, DropPage:true};
-  case types.SHOW_PageDisplay_BingPage:
-    return {...state, Modal:false, BingPage:true, DropPage:false};
-  case types.SHOW_PageDisplay_BingPageAndModal:
-    return {...state, Modal:true, BingPage:true, DropPage:false};
-
+  
 
   default:
     return state;

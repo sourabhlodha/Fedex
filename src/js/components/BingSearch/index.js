@@ -9,25 +9,38 @@ class SearchPage extends Component {
   
   constructor() {
     super();
-    this._onDrop = this._onDrop.bind(this);
+    this._onSearchChange = this._onSearchChange.bind(this);
+    this._onSearch = this._onSearch.bind(this);
+    this.state = {
+      searchValue: '',
+    };
+  }
+  _onSearchChange(e) {
+    this.setState({ searchValue: e.target.value });
   }
 
-  _onDrop() {
-    console.log(test);
+  _onSearch(e) {
+    e.preventDefault();
+    this.props.onTextBingSearch(this.state.searchValue);
   }
- 
-  
 
   render() {
-    const { bingSearchList, callApiFromBing,cosmosDB,backtoHome } = this.props;    
+    const { bingSearchList, callApiFromBing, cosmosDB, backtoHome, onDrop } = this.props;
+    let BingData;
+    if(bingSearchList.visuallySimilarImages){
+      BingData=<BingSearchResult searchResults={bingSearchList.visuallySimilarImages.value} callApiFromBing={callApiFromBing} cosmosDB={cosmosDB} />; 
+    } 
+    if(bingSearchList.value){
+      BingData=<BingSearchResult searchResults={bingSearchList.value} callApiFromBing={callApiFromBing} cosmosDB={cosmosDB} />;
+    }
     return (
       <div className="search-page page-bingSearch">
         <div className="container-fluid search">
           <FedexLogoInverse />
           <form onSubmit={this._onSearch}>
             <div className="input-group">
-              <input type="text" className="form-control" />
-              <SearchDropZone onDrop={this._onDrop}/>
+              <input type="text" className="form-control" value={this.state.searchValue} placeholder="Search for..." onChange={this._onSearchChange}/>
+              <SearchDropZone onDrop={onDrop}/>
               <span className="input-group-btn">
                 <button onClick={() => {}} className="btn btn-secondary" type="submit"><i className="fa fa-search" /></button>
               </span>
@@ -37,7 +50,7 @@ class SearchPage extends Component {
             <i className="fa fa-close"></i>
           </button>
         </div>
-        <BingSearchResult searchResults={bingSearchList.visuallySimilarImages.value} callApiFromBing={callApiFromBing} cosmosDB={cosmosDB} />
+        {BingData}
       </div>
     );
   }
@@ -56,6 +69,10 @@ SearchPage.propTypes = {
   cosmosDB: PropTypes.object,
   bingSearchList: PropTypes.object,
   backtoHome:PropTypes.func,
+  onDrop:PropTypes.func,
+  onTextBingSearch:PropTypes.func,
+  onBingSearchTextChange:PropTypes.func,
+  
 };  
 
 
