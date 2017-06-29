@@ -280,7 +280,7 @@ class SearchPage extends Component {
       noresult = <div><br/><br/><h2 className='text-center'>loading...</h2></div>;
     }
     if (fetched) {
-      if (_.isEmpty(searchResult.value)) {
+      if (_.isEmpty(searchResult.value) & !fetching) {
         noresult = <div><br/><br/><h2 className='text-center'>No result found, plese try with valid search terms.</h2></div>;
       }
     }
