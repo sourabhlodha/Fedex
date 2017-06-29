@@ -111,7 +111,9 @@ class SearchPage extends Component {
   }
 
   _callSearchService() {
-    let url = `https://fedexovergoods.search.windows.net/indexes/fedex/docs?api-version=2016-09-01&search=${this.state.searchValue}&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+    // let searchValue = _.split(this.state.searchValue, ' ');
+    // searchValue =  _.join(searchValue, '+');
+    let url = `https://fedexovergoods.search.windows.net/indexes/fedex/docs?api-version=2016-09-01&search=%22${this.state.searchValue}%22&$top=100&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
     let filterParam = '&$filter=';
 
     const tagParam = [];
@@ -124,13 +126,17 @@ class SearchPage extends Component {
     }
 
     filterParam += _.join(tagParam, ' or ');
-
-    if (!_.isEmpty(this.state.descriptiontags) || !_.isEmpty(this.state.itemtags)) {
-      url = `https://fedexovergoods.search.windows.net/indexes/fedex/docs?api-version=2016-09-01&search=${this.state.searchValue}${filterParam}&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+    if (!this.state.searchValue) {
+      if (!_.isEmpty(this.state.descriptiontags) || !_.isEmpty(this.state.itemtags)) {
+        url = `https://fedexovergoods.search.windows.net/indexes/fedex/docs?api-version=2016-09-01&search=${this.state.searchValue}${filterParam}&highlight=captions&api-key=C4FBD0A95D9184A1C7EB40C8D884F5B4`;
+      }
     }
     
-    this.props.dispatch(onSearch(url));
-    this.setState({ autoSeggestValue: [] });
+    if(this.state.searchValue || !_.isEmpty(tagParam)) {
+      console.log(url);
+      this.props.dispatch(onSearch(url));
+      this.setState({ autoSeggestValue: [] });
+    }
   }
 
   _callSearchOnAutoSuggest(searchValue) {
@@ -180,6 +186,7 @@ class SearchPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
     if (nextProps.dropzoneImgUrl) {
       this.setState({ apiCall: 0 });
       this._callApi(nextProps.dropzoneImgUrl);
@@ -265,12 +272,15 @@ class SearchPage extends Component {
   }
 
   render() {
-    const { searchResult, uploadedImageUrl, isvisionDetailPage, fetching, fetched, cosmosDB } = this.props;
+    const { searchResult, uploadedImageUrl, isvisionDetailPage, fetching, fetched, ocrFetching, handFetching, visionFetching, dzFetching,  cosmosDB } = this.props;
     let searchResultPage;
     let noresult;
+    if (fetching || ocrFetching || handFetching || visionFetching || dzFetching) {
+      noresult = <div><br/><br/><h2 className='text-center'>loading...</h2></div>;
+    }
     if (fetched) {
       if (_.isEmpty(searchResult.value)) {
-        noresult = <h2 className='text-center'>No result found, plese try again</h2>;
+        noresult = <div><br/><br/><h2 className='text-center'>No result found, plese try with valid search terms.</h2></div>;
       }
     }
 

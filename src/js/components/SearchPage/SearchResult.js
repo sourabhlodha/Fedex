@@ -4,7 +4,6 @@ import _ from 'lodash';
 
 const SearchResult = ({ ...props }) => {
   const results = [];
-  
   _.map(props.searchResults, product => {
     const result = _.values(product);
     const score = _.head(result);
@@ -12,11 +11,11 @@ const SearchResult = ({ ...props }) => {
     const data = {
       product,
       score: score,
+      confidence: product.confidence,
     };
     results.push(data);
   });
-  
-  const productResults = _.orderBy(results, ['score'], ['desc', 'asc']);
+  const productResults = _.orderBy(results, ['score'], ['desc']);
 
   const searchList = _.map(productResults, (product, i) => {
     const productImage = {
@@ -28,18 +27,11 @@ const SearchResult = ({ ...props }) => {
     const score = _.head(result);
 
     
-    let confidence = Number(parseFloat(score * 100).toFixed(0));
+    let confidence = Number(parseFloat(product.product.confidence * 100).toFixed(0));
     if(confidence >= 100) {
       confidence = 100;
     }
-    let className;
-    if (confidence <= 13) {
-      className = 'dark';
-    }
-
-    const style = {
-      'width': `${confidence}%`,
-    };
+   
 
     return (
       <div className="card" key={i}>
@@ -48,13 +40,10 @@ const SearchResult = ({ ...props }) => {
             <div className="product-image">
               <div className="full-image"  style={productImage}></div>
             </div>
+            <div className="title score-title">Search Score: <span className="badge score-value">{score}</span></div>
             <div className="product-desc">
               <div className="confidence display-progress">
-                <div className="title">Search Score: <span className="badge badge-primary score-value">{score}</span></div>
-                <div className={`info ${className}`}>
-                  <span className="perc">{confidence}%</span>
-                  <span className="progress"><span className="progress-bar" style={style}></span></span>
-                </div>
+                <div className="search-confidence">Confidence: <span className="perc">{confidence}%</span></div>
               </div>
               <div>
                 <div className="title">Caption:</div>

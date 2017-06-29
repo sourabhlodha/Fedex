@@ -907,6 +907,7 @@ button.card{
 }
 .product-list {
   .product-list-box {
+    position: relative;
     align-items: center;
   }
   .product-image{
@@ -926,6 +927,18 @@ button.card{
       font-size: 16px;
       font-family: $font-medium;
       margin-bottom: 10px;
+    }
+  }
+  .score-title {
+    background: $blue;
+    color: #fff;
+    padding: 10px;
+    .score-value {
+      float: right;
+      font-size: 16px;
+      font-family: $font-bold;
+      background-color: #fff;
+      color: $blue;
     }
   }
   .btn-secondary {
@@ -1271,4 +1284,17 @@ button.card{
       height: auto;
     }
   }
+}
+
+.product-list .display-progress .info.search-result {
+    // position: absolute;
+    // width: 100%;
+    // left: 0;
+    // top: 250px;
+  .progress .progress-bar {
+    height: 10px;
+  }
+}
+.search-confidence {
+
 }

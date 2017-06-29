@@ -248,7 +248,9 @@ class LandingPage extends Component {
         }
       });
       const cosmosDB = _.extend({}, this.state.cosmosDB);
-      cosmosDB.confidence = Number(newConfidence.toFixed(3));
+      if (newConfidence) {
+        cosmosDB.confidence = Number(newConfidence.toFixed(3));
+      }
       this.setState({ cosmosDB, descriptiontags: allcustomvision, disableCustomVisionButton: true });
       
     }
