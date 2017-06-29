@@ -210,7 +210,7 @@ class SearchPage extends Component {
                   });
                 });
               });
-              captions.push(_.join(allOrcText, ' '));
+              // captions.push(_.join(allOrcText, ' '));
             }
           }
           
@@ -221,7 +221,7 @@ class SearchPage extends Component {
               _.map(nextProps.handList.recognitionResult.lines, line => {
                 allHandText.push(line.text);
               });
-              captions.push(_.join(allHandText, ' '));
+              // captions.push(_.join(allHandText, ' '));
             }
           }
 
@@ -240,13 +240,13 @@ class SearchPage extends Component {
             }
           }
           let searchValue;
-          if (captions.length > 1) {
-            searchValue = _.join(captions, ' ');
-          } else {
-            searchValue = captions[0];
-          }
+          // if (captions.length > 1) {
+            // searchValue = _.join(captions, ' ');
+          // } else {
+          searchValue = captions[0];
+          // }
           const itemtags = tags;
-
+          console.log(searchValue);
           this.setState({ searchValue, itemtags, descriptiontags}, () => {
             this._callSearchService();
           });
@@ -257,6 +257,7 @@ class SearchPage extends Component {
     if (!_.isEmpty(nextProps.intent)) {
       if (!_.isEmpty(nextProps.intent.entities)) {
         if (nextProps.intent.entities[0].type === 'SearchItem') {
+          console.log(nextProps.intent.entities[0].entity);
           this.setState({ searchValue: nextProps.intent.entities[0].entity }, () => {
             this._callSearchService();
           });
